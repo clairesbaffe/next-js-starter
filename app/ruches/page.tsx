@@ -13,7 +13,7 @@ export default function Page() {
         {routes[1].items.map((item) => {
           return (
             <Link
-              href={`/${item.slug}`}
+              href={`/ruches/${item.slug}`}
               key={`Ruche ${item.slug}`}
               className="group block space-y-1.5 rounded-lg bg-gray-900 px-5 py-3 hover:bg-gray-800"
             >
