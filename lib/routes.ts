@@ -5,7 +5,7 @@ export type Item = {
   
   export const routes: { name: string; items: Item[] }[] = [
     {
-      name: 'Layouts',
+      name: 'ruches',
       items: [
         {
           slug: '1',
