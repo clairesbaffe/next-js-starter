@@ -1,3 +1,5 @@
+'use client'
+
 import { demos } from '#/lib/demos';
 import { routes } from '#/lib/routes';
 import Link from 'next/link';
