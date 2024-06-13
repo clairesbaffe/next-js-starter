@@ -14,7 +14,7 @@ export default function Page() {
 
       <div className="space-y-10 text-white">
 
-        <h1>`Ruche ${pathname}`</h1>
+        <h1>Ruche {pathname} .</h1>
 
         {
         /* {routes[1].items.map((item) => {
