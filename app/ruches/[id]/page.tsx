@@ -1,17 +1,23 @@
 import { demos } from '#/lib/demos';
 import { routes } from '#/lib/routes';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'
 
 
 export default function Page() {
+
+
+    const pathname = usePathname()
+
   return (
     <div className="space-y-8">
 
       <div className="space-y-10 text-white">
 
-        <h1>Ruche</h1>
+        <h1>`Ruche ${pathname}`</h1>
 
-        {/* {routes[1].items.map((item) => {
+        {
+        /* {routes[1].items.map((item) => {
           return (
             <Link
               href={`/${item.slug}`}
