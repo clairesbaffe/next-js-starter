@@ -13,7 +13,7 @@ export default function Page() {
 
 
 
-        {demos[1].items.map((item) => {
+        {routes[1].items.map((item) => {
           return (
             <Link
               href={`/${item.slug}`}
