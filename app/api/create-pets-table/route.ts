@@ -1,4 +1,4 @@
-import { sql } from 'npm install @vercel/postgres';
+import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
  
 export async function GET(request: Request) {
