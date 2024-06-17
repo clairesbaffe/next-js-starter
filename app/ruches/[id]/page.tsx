@@ -10,7 +10,7 @@ export default async function Page() {
   return (
     <div className="space-y-8">
       <div className="space-y-10 text-white">
-        <h1>Ruche {router.query.slug}</h1>
+        <h1>Ruche {router.query.id}</h1>
       </div>
     </div>
   );
