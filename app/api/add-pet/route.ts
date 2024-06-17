@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function GET(req: NextApiRequest) {
+export default async function GET(request: Request, req: NextApiRequest) {
   const [name, owner] = req.body;
 
   try {
