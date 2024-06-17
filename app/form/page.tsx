@@ -10,6 +10,23 @@ export default function Page() {
     event.preventDefault();
 
     console.log(`Entry : ${name} ; ${owner}`);
+
+    const formData = {
+      name: name,
+      owner: owner,
+    };
+
+    const response = await fetch(
+      'https://next-js-starter-lyart.vercel.app/api/add-pet',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
+
+    // Handle response if necessary
+    // const data = await response.json();
+    // ...
   }
 
   return (
@@ -24,6 +41,7 @@ export default function Page() {
             name="name"
             id="name"
             onChange={(e) => setName(e.target.value)}
+            required
           />
 
           <label htmlFor="owner">Owner : </label>
@@ -32,6 +50,7 @@ export default function Page() {
             name="owner"
             id="owner"
             onChange={(e) => setOwner(e.target.value)}
+            required
           />
 
           <input type="submit" value="Add" />
@@ -40,15 +59,3 @@ export default function Page() {
     </div>
   );
 }
-
-// const response = await fetch(
-//   'https://next-js-starter-lyart.vercel.app/api/add-pet',
-//   {
-//     method: 'POST',
-//     body: formData,
-//   },
-// );
-
-// Handle response if necessary
-// const data = await response.json();
-// ...
