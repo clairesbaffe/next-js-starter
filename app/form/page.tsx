@@ -1,15 +1,15 @@
 'use client';
 
 import { log } from 'console';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 
 export default async function Page() {
+  const [name, setName] = useState('');
+  const [owner, setOwner] = useState('');
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = event.currentTarget;
-    const name = formData.get.name;
-    const owner = formData.get.owner;
     console.log(`Entry : ${name} ; ${owner}`);
 
     // const response = await fetch(
@@ -32,10 +32,20 @@ export default async function Page() {
 
         <form onSubmit={onSubmit}>
           <label htmlFor="name">Name : </label>
-          <input type="text" name="name" id="name" />
+          <input
+            type="text"
+            name="name"
+            id="name"
+            onChange={(e) => setName(e.target.value)}
+          />
 
           <label htmlFor="owner">Owner : </label>
-          <input type="text" name="owner" id="owner" />
+          <input
+            type="text"
+            name="owner"
+            id="owner"
+            onChange={(e) => setOwner(e.target.value)}
+          />
 
           <input type="submit" value="Add" />
         </form>
