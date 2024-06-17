@@ -25,8 +25,8 @@ export default async function Page() {
           {data.rows.map((row: any) => {
             return (
               <div>
-                <p>`Name : ${row.name}`</p>
-                <p>`Owner : ${row.owner}`</p>
+                <p>Name : {row.name}</p>
+                <p>Owner : {row.owner}</p>
                 <br />
               </div>
             );
