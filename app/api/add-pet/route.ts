@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function Route(req: NextApiRequest, res: NextApiResponse) {
+export default async function POST(req: NextApiRequest) {
   const [name, owner] = req.body;
 
   try {
