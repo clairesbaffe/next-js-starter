@@ -1,14 +1,16 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const petName = searchParams.get('petName');
-  const ownerName = searchParams.get('ownerName');
+export default async function create(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
+  const [name, owner] = req.body;
 
   try {
-    if (!petName || !ownerName) throw new Error('Pet and owner names required');
-    await sql`INSERT INTO Pets (Name, Owner) VALUES (${petName}, ${ownerName});`;
+    if (!name || !owner) throw new Error('Pet and owner names required');
+    await sql`INSERT INTO Pets (Name, Owner) VALUES (${name}, ${owner});`;
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }
