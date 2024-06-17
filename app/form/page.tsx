@@ -8,8 +8,8 @@ export default async function Page() {
     event.preventDefault();
 
     const formData = event.currentTarget;
-    const name = formData.get('name');
-    const owner = formData.get('owner');
+    const name = formData.get.name;
+    const owner = formData.get.owner;
     console.log(`Entry : ${name} ; ${owner}`);
 
     // const response = await fetch(
