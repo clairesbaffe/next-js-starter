@@ -1,8 +1,5 @@
 'use client';
 
-import { demos } from '#/lib/demos';
-import { routes } from '#/lib/routes';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default async function Page() {
@@ -14,23 +11,27 @@ export default async function Page() {
     );
     const data = await response.json();
 
-    // console.log(data.rows);
+    return data;
   };
 
-  fetchData();
+  const data = await fetchData();
 
   return (
     <div className="space-y-8">
       <div className="space-y-10 text-white">
         <h1>Ruche {pathname}</h1>
 
-        {/* <div>
-          {
-            data.rows.map((section) => {
-              return ()
-            }
-        }
-        </div> */}
+        <div>
+          {data.rows.map((row: any) => {
+            return (
+              <div>
+                <p>`Name : ${row.name}`</p>
+                <p>`Owner : ${row.owner}`</p>
+                <br />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
