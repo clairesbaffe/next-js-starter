@@ -20,7 +20,10 @@ export default function Page() {
       'https://next-js-starter-lyart.vercel.app/api/add-pet',
       {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       },
     );
 
