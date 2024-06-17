@@ -7,7 +7,7 @@ export default async function Page() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    console.log(formData);
+    console.log(formData.values);
 
     // const response = await fetch(
     //   'https://next-js-starter-lyart.vercel.app/api/add-pet',
