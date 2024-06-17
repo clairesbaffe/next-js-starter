@@ -1,9 +1,8 @@
 'use client';
 
-import { log } from 'console';
 import { FormEvent, useState } from 'react';
 
-export default async function Page() {
+export default function Page() {
   const [name, setName] = useState('');
   const [owner, setOwner] = useState('');
 
@@ -11,18 +10,6 @@ export default async function Page() {
     event.preventDefault();
 
     console.log(`Entry : ${name} ; ${owner}`);
-
-    // const response = await fetch(
-    //   'https://next-js-starter-lyart.vercel.app/api/add-pet',
-    //   {
-    //     method: 'POST',
-    //     body: formData,
-    //   },
-    // );
-
-    // Handle response if necessary
-    // const data = await response.json();
-    // ...
   }
 
   return (
@@ -53,3 +40,15 @@ export default async function Page() {
     </div>
   );
 }
+
+// const response = await fetch(
+//   'https://next-js-starter-lyart.vercel.app/api/add-pet',
+//   {
+//     method: 'POST',
+//     body: formData,
+//   },
+// );
+
+// Handle response if necessary
+// const data = await response.json();
+// ...
