@@ -1,6 +1,5 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { FormEvent } from 'react';
 
 export default async function Page() {
@@ -8,16 +7,18 @@ export default async function Page() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const response = await fetch(
-      'https://next-js-starter-lyart.vercel.app/api/add-pet',
-      {
-        method: 'POST',
-        body: formData,
-      },
-    );
+    console.log(formData);
+
+    // const response = await fetch(
+    //   'https://next-js-starter-lyart.vercel.app/api/add-pet',
+    //   {
+    //     method: 'POST',
+    //     body: formData,
+    //   },
+    // );
 
     // Handle response if necessary
-    const data = await response.json();
+    // const data = await response.json();
     // ...
   }
 
