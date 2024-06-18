@@ -8,7 +8,7 @@ const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 export default async function Page() {
   const [pageIsMounted, setPageIsMounted] = useState(false);
 
-  mapboxgl.accessToken = process.env.MAPBOX_KEY;
+  mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY;
 
   useEffect(() => {
     setPageIsMounted(true);
