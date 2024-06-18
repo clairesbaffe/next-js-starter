@@ -1,7 +1,7 @@
 'use client';
 
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Page.module.css';
 import { useEffect, useState } from 'react';
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
