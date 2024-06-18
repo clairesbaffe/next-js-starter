@@ -5,10 +5,10 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
-mapboxgl.accessToken = process.env.MAPBOX_KEY;
-
 export default async function Page() {
   const [pageIsMounted, setPageIsMounted] = useState(false);
+
+  mapboxgl.accessToken = process.env.MAPBOX_KEY;
 
   useEffect(() => {
     setPageIsMounted(true);
