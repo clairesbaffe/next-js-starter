@@ -1,15 +1,11 @@
 'use client';
 
 import Head from 'next/head';
-import styles from '../styles/Page.module.css';
+// import styles from '../styles/Page.module.css';
 import { useEffect, useState } from 'react';
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
 mapboxgl.accessToken = process.env.MAPBOX_KEY;
-const map = new mapboxgl.Map({
-  container: 'my-map',
-  style: 'mapbox://styles/mapbox/streets-v11',
-});
 
 export default async function Page() {
   const [pageIsMounted, setPageIsMounted] = useState(false);
@@ -23,7 +19,8 @@ export default async function Page() {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div>
+      {/* className={styles.container} */}
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -33,7 +30,8 @@ export default async function Page() {
         />
       </Head>
 
-      <main className={styles.main}>
+      <main>
+        {/* className={styles.main} */}
         <div id="my-map" style={{ height: 500, width: 500 }} />
       </main>
     </div>
