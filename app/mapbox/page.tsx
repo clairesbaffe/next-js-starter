@@ -5,30 +5,21 @@ import './style.css';
 import { useEffect } from 'react';
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY;
+
 export default function Page() {
-  mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY;
+  let geojson: any = [];
 
-  const geojson = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [-0.649806, 44.828618],
-        },
-      },
-      {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [-0.646692, 44.828618],
-        },
-      },
-    ],
-  };
+  async function fetchLocations() {
+    const response = await fetch(
+      'https://next-js-starter-lyart.vercel.app/api/get-locations',
+    );
+    const data = await response.json();
 
-  function loadMap() {
+    return data;
+  }
+
+  async function loadMap() {
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -36,19 +27,22 @@ export default function Page() {
       zoom: 11.5,
     });
 
-    geojson.features.forEach((feature, index) => {
+    await fetchLocations().then((locations) => {
+      geojson = locations.rows;
+    });
+
+    geojson.forEach((location: any, index: Number) => {
       const el = document.createElement('div');
-      if (index == geojson.features.length - 1) el.className = 'last-marker';
+      if (index == geojson.length - 1) el.className = 'last-marker';
       else el.className = 'previous-marker';
 
+      const coordinates = [location.longitude, location.latitude];
+
       new mapboxgl.Marker(el)
-        .setLngLat(feature.geometry.coordinates)
-        .setPopup
-        // new mapboxgl.Popup({ offset: 25 }) // add popups
-        //   .setHTML(
-        //     `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`,
-        //   ),
-        ()
+        .setLngLat(coordinates)
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 }).setHTML(`<h3>Hello World</p>`),
+        )
         .addTo(map);
     });
 
