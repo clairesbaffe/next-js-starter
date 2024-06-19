@@ -40,9 +40,9 @@ export default function Page() {
 
       new mapboxgl.Marker(el)
         .setLngLat(coordinates)
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 }).setHTML(`<h3>Hello World</p>`),
-        )
+        // .setPopup(
+        //   new mapboxgl.Popup({ offset: 25 }).setHTML(`<h3>Hello World</p>`),
+        // )
         .addTo(map);
     });
 
