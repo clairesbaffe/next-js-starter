@@ -1,11 +1,17 @@
-.marker {
+.last-marker {
   background-image: url('/marker_icon.png');
   background-size: cover;
+  position: absolute;
   width: 30px;
   height: 30px;
-  border-radius: 30%;
-  /* cursor: pointer; */
-  padding-top: -30px;
+  top: -15px;
+}
+
+.previous-marker {
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
 }
 
 /* .mapboxgl-popup {

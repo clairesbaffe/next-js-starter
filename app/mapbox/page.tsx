@@ -22,7 +22,7 @@ export default function Page() {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [-0.646692, 44.828638],
+          coordinates: [-0.646692, 44.828618],
         },
       },
     ],
@@ -46,10 +46,11 @@ export default function Page() {
     );
 
     // add markers to map
-    for (const feature of geojson.features) {
+    geojson.features.forEach((feature, index) => {
       // create a HTML element for each feature
       const el = document.createElement('div');
-      el.className = 'marker';
+      if (index == geojson.features.length - 1) el.className = 'last-marker';
+      else el.className = 'previous-marker';
 
       // make a marker for each feature and add to the map
       new mapboxgl.Marker(el)
@@ -61,7 +62,7 @@ export default function Page() {
         //   ),
         ()
         .addTo(map);
-    }
+    });
   }, []);
 
   return <div id="my-map" style={{ height: 500, width: 800 }} />;
