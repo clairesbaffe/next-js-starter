@@ -28,12 +28,28 @@ export default function Page() {
     ],
   };
 
-  useEffect(() => {
+  function loadMap() {
     const map = new mapboxgl.Map({
-      container: 'my-map',
+      container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [-0.57918, 44.837789],
       zoom: 11.5,
+    });
+
+    geojson.features.forEach((feature, index) => {
+      const el = document.createElement('div');
+      if (index == geojson.features.length - 1) el.className = 'last-marker';
+      else el.className = 'previous-marker';
+
+      new mapboxgl.Marker(el)
+        .setLngLat(feature.geometry.coordinates)
+        .setPopup
+        // new mapboxgl.Popup({ offset: 25 }) // add popups
+        //   .setHTML(
+        //     `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`,
+        //   ),
+        ()
+        .addTo(map);
     });
 
     map.addControl(
@@ -45,25 +61,25 @@ export default function Page() {
       }),
     );
 
-    // add markers to map
-    geojson.features.forEach((feature, index) => {
-      // create a HTML element for each feature
-      const el = document.createElement('div');
-      if (index == geojson.features.length - 1) el.className = 'last-marker';
-      else el.className = 'previous-marker';
+    map.addControl(
+      new mapboxgl.FullscreenControl({
+        container: document.querySelector('#map'),
+      }),
+    );
 
-      // make a marker for each feature and add to the map
-      new mapboxgl.Marker(el)
-        .setLngLat(feature.geometry.coordinates)
-        .setPopup
-        // new mapboxgl.Popup({ offset: 25 }) // add popups
-        //   .setHTML(
-        //     `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`,
-        //   ),
-        ()
-        .addTo(map);
-    });
+    map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+  }
+
+  useEffect(() => {
+    loadMap();
   }, []);
 
-  return <div id="my-map" style={{ height: 500, width: 800 }} />;
+  return (
+    <div>
+      <button onClick={loadMap} className="btn btn-outline btn-primary">
+        REFRESH
+      </button>
+      <div id="map" />
+    </div>
+  );
 }

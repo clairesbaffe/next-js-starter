@@ -1,3 +1,9 @@
+#map {
+  height: 70vh;
+  width: 60vw;
+  margin-top: 2vh;
+}
+
 .last-marker {
   background-image: url('/marker_icon.png');
   background-size: cover;

@@ -1,5 +1,6 @@
 import colors from 'tailwindcss/colors';
 import { Config } from 'tailwindcss';
+import daisyui from 'daisyui';
 
 export default {
   content: [
@@ -86,5 +87,9 @@ export default {
       }),
     },
   },
-  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    daisyui,
+  ],
 } satisfies Config;
