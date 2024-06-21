@@ -26,10 +26,7 @@ export async function GET(request: Request) {
 
     return response;
   } catch (error) {
-    const response = NextResponse.json(
-      { error: error.message },
-      { status: 500 },
-    );
+    const response = NextResponse.json({ error }, { status: 500 });
 
     // Définir les en-têtes pour désactiver le cache en cas d'erreur également
     response.headers.set(
