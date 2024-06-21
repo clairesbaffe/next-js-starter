@@ -10,7 +10,7 @@
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
     "test": "pnpm prettier:check && pnpm lint",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build"
+    "postbuild": "npx prisma generate && npx prisma migrate deploy"
   },
   "git": {
     "pre-commit": "lint-staged"
@@ -28,7 +28,6 @@
     "mapbox-gl": "3.4.0",
     "ms": "3.0.0-canary.1",
     "next": "14.3.0-canary.33",
-    "prisma": "5.15.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "server-only": "0.0.1",
@@ -52,6 +51,7 @@
     "postcss": "8.4.38",
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "0.5.14",
+    "prisma": "5.15.1",
     "tailwindcss": "3.4.3",
     "typescript": "5.4.5"
   }
