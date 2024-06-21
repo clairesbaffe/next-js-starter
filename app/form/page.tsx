@@ -11,21 +11,21 @@ export default function Page() {
 
     console.log(`Entry : ${name} ; ${owner}`);
 
-    const formData = {
-      name: name,
-      owner: owner,
-    };
+    // const formData = {
+    //   name: name,
+    //   owner: owner,
+    // };
 
-    const response = await fetch(
-      'https://next-js-starter-lyart.vercel.app/api/add-pet',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      },
-    );
+    // const response = await fetch(
+    //   'https://next-js-starter-lyart.vercel.app/api/add-pet',
+    //   {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(formData),
+    //   },
+    // );
 
     // Handle response if necessary
     // const data = await response.json();
