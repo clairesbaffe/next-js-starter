@@ -9,11 +9,36 @@ export async function GET(request: Request) {
   try {
     if (!longitude || !latitude)
       throw new Error('longitude and latitude required');
-    await sql`INSERT INTO Locations (longitude, latitude) VALUES (${longitude}, ${latitude});`;
-  } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
-  }
 
-  const locations = await sql`SELECT * FROM Locations;`;
-  return NextResponse.json({ locations }, { status: 200 });
+    await sql`INSERT INTO Locations (longitude, latitude) VALUES (${longitude}, ${latitude});`;
+
+    const locations = await sql`SELECT * FROM Locations;`;
+
+    const response = NextResponse.json({ locations }, { status: 200 });
+
+    // Définir les en-têtes pour désactiver le cache
+    response.headers.set(
+      'Cache-Control',
+      'no-store, no-cache, must-revalidate, proxy-revalidate',
+    );
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+
+    return response;
+  } catch (error) {
+    const response = NextResponse.json(
+      { error: error.message },
+      { status: 500 },
+    );
+
+    // Définir les en-têtes pour désactiver le cache en cas d'erreur également
+    response.headers.set(
+      'Cache-Control',
+      'no-store, no-cache, must-revalidate, proxy-revalidate',
+    );
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+
+    return response;
+  }
 }
