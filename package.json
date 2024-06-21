@@ -10,10 +10,7 @@
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
     "test": "pnpm prettier:check && pnpm lint",
-    "postbuild": "npx prisma generate && npx prisma migrate deploy",
-    "prisma:migrate:resolve": "dotenv -e .env.development.local -- npx prisma migrate resolve --applied \"migration\"",
-    "prisma:migrate:dev": "dotenv -e .env.development.local -- npx prisma migrate dev",
-    "prisma:generate": "dotenv -e .env.development.local -- npx prisma generate"
+    "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "git": {
     "pre-commit": "lint-staged"
