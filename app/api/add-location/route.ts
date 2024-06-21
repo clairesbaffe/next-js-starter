@@ -18,13 +18,15 @@ export async function GET(request: Request) {
           latitude: parseFloat(latitude),
         },
       });
+
+      return NextResponse.json(
+        `Created location {${parseFloat(longitude)}, ${parseFloat(latitude)}}`,
+        { status: 200 },
+      );
     }
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
-
-  return NextResponse.json(
-    `Created location {${parseFloat(longitude)}, ${parseFloat(latitude)}}`,
-    { status: 200 },
-  );
 }
