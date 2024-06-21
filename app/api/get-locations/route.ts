@@ -1,15 +1,13 @@
-// pages/api/get-locations.ts
-
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export const dynamic = 'force-dynamic'; // defaults to auto
 export async function GET(request: Request) {
   try {
     const locations = await prisma.location.findMany();
 
-    // Ajout des headers pour éviter la mise en cache
     const headers = {
       'Cache-Control': 'no-cache, no-store, must-revalidate',
     };
