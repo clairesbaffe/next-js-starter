@@ -4,10 +4,17 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
-  try {
-    const deleteLocations = await prisma.location.deleteMany({});
+  const { searchParams } = new URL(request.url);
+  const reset = searchParams.get('reset');
 
-    return NextResponse.json('Deleted all locations', { status: 200 });
+  try {
+    if (!reset || reset != 'true') {
+      throw new Error('reset confirmation required');
+    } else {
+      await prisma.location.deleteMany({});
+
+      return NextResponse.json('Deleted all locations', { status: 200 });
+    }
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   } finally {

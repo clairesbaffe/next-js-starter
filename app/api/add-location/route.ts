@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     if (!longitude || !latitude)
       throw new Error('longitude and latitude required');
     else {
-      const location = await prisma.location.create({
+      await prisma.location.create({
         data: {
           longitude: parseFloat(longitude),
           latitude: parseFloat(latitude),
