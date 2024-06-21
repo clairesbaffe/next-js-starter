@@ -10,7 +10,10 @@
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
     "test": "pnpm prettier:check && pnpm lint",
-    "postbuild": "npx prisma generate && npx prisma migrate deploy"
+    "postbuild": "npx prisma generate && npx prisma migrate deploy",
+    "prisma:migrate:resolve": "dotenv -e .env.development.local -- npx prisma migrate resolve --applied \"migration\"",
+    "prisma:migrate:dev": "dotenv -e .env.development.local -- npx prisma migrate dev",
+    "prisma:generate": "dotenv -e .env.development.local -- npx prisma generate"
   },
   "git": {
     "pre-commit": "lint-staged"
@@ -25,6 +28,8 @@
     "clsx": "2.1.1",
     "date-fns": "3.6.0",
     "dinero.js": "2.0.0-alpha.10",
+    "dotenv": "16.4.5",
+    "dotenv-cli": "7.4.2",
     "mapbox-gl": "3.4.0",
     "ms": "3.0.0-canary.1",
     "next": "14.3.0-canary.33",
