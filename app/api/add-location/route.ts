@@ -1,5 +1,7 @@
-import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
+
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -9,11 +11,20 @@ export async function GET(request: Request) {
   try {
     if (!longitude || !latitude)
       throw new Error('longitude and latitude required');
-    await sql`INSERT INTO Locations (longitude, latitude) VALUES (${longitude}, ${latitude});`;
+    else {
+      const location = await prisma.location.create({
+        data: {
+          longitude: parseFloat(longitude),
+          latitude: parseFloat(latitude),
+        },
+      });
+    }
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }
 
-  const locations = await sql`SELECT * FROM Locations;`;
-  return NextResponse.json({ locations }, { status: 200 });
+  return NextResponse.json(
+    `Created location {${parseFloat(longitude)}, ${parseFloat(latitude)}}`,
+    { status: 200 },
+  );
 }
