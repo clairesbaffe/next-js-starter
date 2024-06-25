@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
   try {
     if (!trackerId || !longitude || !latitude)
-      throw new Error('longitude and latitude required');
+      throw new Error('Id de tracker, latitude et longitude requis');
     else {
       await prisma.historique_Tracker.create({
         data: {
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       });
 
       return NextResponse.json(
-        `Created location {${parseFloat(longitude)}, ${parseFloat(latitude)}}`,
+        `Localisation {${parseFloat(longitude)}, ${parseFloat(latitude)}} créée pour le tracker ${trackerId}`,
         { status: 200 },
       );
     }
