@@ -37,7 +37,7 @@ model Tracker {
   mode              TrackerMode
   date_ajout        DateTime @default(now())
   date_modification DateTime @updatedAt
-    historiques     Historique_Tracker[]
+  historiques       Historique_Tracker[]
 }
 
 model Historique_Tracker {
