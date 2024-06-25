@@ -5,15 +5,17 @@ const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+  const trackerId = searchParams.get('trackerId');
   const longitude = searchParams.get('longitude');
   const latitude = searchParams.get('latitude');
 
   try {
-    if (!longitude || !latitude)
+    if (!trackerId || !longitude || !latitude)
       throw new Error('longitude and latitude required');
     else {
-      await prisma.location.create({
+      await prisma.historique_Tracker.create({
         data: {
+          tracker_id: parseInt(trackerId),
           longitude: parseFloat(longitude),
           latitude: parseFloat(latitude),
         },

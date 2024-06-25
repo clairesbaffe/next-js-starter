@@ -11,7 +11,9 @@ export default function Page() {
   let geojson: any = [];
 
   async function fetchLocations() {
-    const response = await fetch('http://localhost:3000/api/get-locations');
+    const response = await fetch(
+      'https://next-js-starter-lyart.vercel.app/api/get-locations',
+    );
     const data = await response.json();
 
     return data;
@@ -74,9 +76,9 @@ export default function Page() {
 
   return (
     <div>
-      {/* <button onClick={initialiseMap} className="btn btn-outline btn-primary">
+      <button onClick={initialiseMap} className="btn btn-outline btn-primary">
         REFRESH
-      </button> */}
+      </button>
       <div id="map" />
     </div>
   );
