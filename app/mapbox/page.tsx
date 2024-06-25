@@ -11,9 +11,7 @@ export default function Page() {
   let geojson: any = [];
 
   async function fetchLocations() {
-    const response = await fetch(
-      'https://next-js-starter-lyart.vercel.app/api/get-locations',
-    );
+    const response = await fetch('http://localhost:3000/api/get-locations');
     const data = await response.json();
 
     return data;
@@ -24,9 +22,12 @@ export default function Page() {
     await fetchLocations().then((response) => {
       geojson = response.locations;
     });
+    loadMap();
   }
 
   async function loadMap() {
+    console.log('Loading map...');
+
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -73,9 +74,9 @@ export default function Page() {
 
   return (
     <div>
-      <button onClick={initialiseMap} className="btn btn-outline btn-primary">
+      {/* <button onClick={initialiseMap} className="btn btn-outline btn-primary">
         REFRESH
-      </button>
+      </button> */}
       <div id="map" />
     </div>
   );
