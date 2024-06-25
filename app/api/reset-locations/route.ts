@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     if (!reset || reset != 'true') {
       throw new Error('reset confirmation required');
     } else {
-      await prisma.location.deleteMany({});
+      await prisma.historique_Tracker.deleteMany({});
 
       return NextResponse.json('Deleted all locations', { status: 200 });
     }
