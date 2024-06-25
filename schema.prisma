@@ -13,9 +13,45 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
  
-model Location {
-  id        Int      @id @default(autoincrement())
-  longitude Float
-  latitude  Float
-  createdAt DateTime @default(now())
+model Rucher {
+  id                Int      @id @default(autoincrement())
+  nom               String
+  date_creation     DateTime @default(now())
+  ruches            Ruche[]
+  trackers          Tracker[]
+}
+
+model Ruche {
+  id                Int      @id @default(autoincrement())
+  nom               String
+  rucher            Rucher   @relation(fields: [rucher_id], references: [id])
+  rucher_id         Int
+  date_creation     DateTime @default(now())
+}
+
+model Tracker {
+  id                Int      @id @default(autoincrement())
+  nom               String
+  rucher            Rucher   @relation(fields: [rucher_id], references: [id])
+  rucher_id         Int
+  mode              TrackerMode
+  date_ajout        DateTime @default(now())
+  date_modification DateTime @updatedAt
+    historiques     Historique_Tracker[]
+}
+
+model Historique_Tracker {
+  id                Int      @id @default(autoincrement())
+  tracker           Tracker   @relation(fields: [tracker_id], references: [id])
+  tracker_id        Int
+  latitude          Float
+  longitude         Float
+  date_ajout        DateTime @default(now())
+}
+
+enum TrackerMode {
+  INACTIF
+  FONCTIONNEL
+  PAUSE
+  TRACKING
 }

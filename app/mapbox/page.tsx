@@ -19,16 +19,19 @@ export default function Page() {
     return data;
   }
 
+  async function initialiseMap() {
+    console.log('Initialising...');
+    await fetchLocations().then((response) => {
+      geojson = response.locations;
+    });
+  }
+
   async function loadMap() {
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [-0.57918, 44.837789],
       zoom: 11.5,
-    });
-
-    await fetchLocations().then((response) => {
-      geojson = response.locations;
     });
 
     geojson.forEach((location: any, index: Number) => {
@@ -65,12 +68,12 @@ export default function Page() {
   }
 
   useEffect(() => {
-    loadMap();
+    initialiseMap();
   }, []);
 
   return (
     <div>
-      <button onClick={loadMap} className="btn btn-outline btn-primary">
+      <button onClick={initialiseMap} className="btn btn-outline btn-primary">
         REFRESH
       </button>
       <div id="map" />
