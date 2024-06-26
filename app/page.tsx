@@ -8,7 +8,7 @@ export default function Page() {
       <h1 className="text-xl font-medium text-gray-300">Examples</h1>
 
       <div className="space-y-10 text-white">
-        <Link
+        {/* <Link
           href={`/ruches`}
           className="group block space-y-1.5 rounded-lg bg-gray-900 px-5 py-3 hover:bg-gray-800"
         >
@@ -33,14 +33,23 @@ export default function Page() {
           <div className="font-medium text-gray-200 group-hover:text-gray-50">
             Voir toutes les données
           </div>
-        </Link>
+        </Link> */}
 
         <Link
           href={`/mapbox`}
           className="group block space-y-1.5 rounded-lg bg-gray-900 px-5 py-3 hover:bg-gray-800"
         >
           <div className="font-medium text-gray-200 group-hover:text-gray-50">
-            Mapbox
+            Map
+          </div>
+        </Link>
+
+        <Link
+          href={`/liste-trackers`}
+          className="group block space-y-1.5 rounded-lg bg-gray-900 px-5 py-3 hover:bg-gray-800"
+        >
+          <div className="font-medium text-gray-200 group-hover:text-gray-50">
+            Liste des trackers
           </div>
         </Link>
 
