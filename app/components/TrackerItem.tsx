@@ -43,7 +43,7 @@ async function handleModeChange(mode: string, tracker_id: number) {
       break;
   }
   await fetch(
-    `http://localhost:3000/api/update-tracker?id=${tracker_id}&mode=${new_mode}`,
+    `https://next-js-starter-lyart.vercel.app/api/update-tracker?id=${tracker_id}&mode=${new_mode}`,
   );
 }
 
