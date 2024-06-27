@@ -3,17 +3,13 @@ import TrackerItem from '../components/TrackerItem';
 import { revalidateTag } from 'next/cache';
 
 async function fetchTrackers() {
-  const response = await fetch(
-    `${process.env.API_URL}/api/get-trackers-by-rucher-id?rucher_id=1`,
-  );
+  const response = await fetch(`/api/get-trackers-by-rucher-id?rucher_id=1`);
   const data = await response.json();
   return data;
 }
 
 async function fetchRucher(rucher_id: Number) {
-  const response = await fetch(
-    `${process.env.API_URL}/api/get-rucher-by-id?rucher_id=${rucher_id}`,
-  );
+  const response = await fetch(`/api/get-rucher-by-id?rucher_id=${rucher_id}`);
   const data = await response.json();
   return data;
 }
