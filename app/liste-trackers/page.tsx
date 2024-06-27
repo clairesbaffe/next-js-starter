@@ -1,6 +1,6 @@
-// pages/Page.tsx
 import './style.css';
-import TrackerItem from '../components/TrackerItem'; // Importez le composant client
+import TrackerItem from '../components/TrackerItem';
+import { revalidateTag } from 'next/cache';
 
 async function fetchTrackers() {
   const response = await fetch(
@@ -19,6 +19,7 @@ async function fetchRucher(rucher_id: Number) {
 }
 
 export default async function Page() {
+  revalidateTag('Tracker');
   const trackers = await fetchTrackers();
   const trackersWithRucher = await Promise.all(
     trackers.trackers.map(async (tracker: any) => {
@@ -26,7 +27,6 @@ export default async function Page() {
       return { ...tracker, rucher };
     }),
   );
-  // console.log(JSON.stringify(trackersWithRucher, null, 2));
 
   return (
     <div className="space-y-8">

@@ -1,5 +1,4 @@
-// components/TrackerItem.tsx
-'use client'; // Indique que ce composant est un composant client
+'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -9,6 +8,7 @@ import {
   faPowerOff,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 
 function renderModeDescription(mode: string): string {
   switch (mode) {
@@ -42,25 +42,38 @@ async function handleModeChange(mode: string, tracker_id: number) {
       new_mode = 'FONCTIONNEL';
       break;
   }
+  console.log('Determined mode, trying to fetch');
+
   await fetch(
     `https://next-js-starter-lyart.vercel.app/api/update-tracker?id=${tracker_id}&mode=${new_mode}`,
   );
+  console.log('Fetched');
+
+  window.location.reload();
+
+  return new_mode;
 }
 
 export default function TrackerItem({ tracker }: { tracker: any }) {
+  const [trackerMode, setTrackerMode] = useState(tracker.mode);
+
   return (
     <div className="tracker-container">
       <div className="left-side">
         <h1>{tracker.nom}</h1>
-        <p>{renderModeDescription(tracker.mode)}</p>
+        <p>{renderModeDescription(trackerMode)}</p>
         <p>Rucher : {tracker.rucher.rucher.nom}</p>
         <p>ID : {tracker.id}</p>
       </div>
       <div className="right-side">
         <FontAwesomeIcon className="tracker-menu-icon" icon={faEllipsis} />
 
-        {tracker.mode === 'INACTIF' && (
-          <div onClick={() => handleModeChange(tracker.mode, tracker.id)}>
+        {trackerMode === 'INACTIF' && (
+          <div
+            onClick={() =>
+              setTrackerMode(handleModeChange(trackerMode, tracker.id))
+            }
+          >
             <FontAwesomeIcon
               icon={faPowerOff}
               className="tracker-mode-icon"
@@ -69,8 +82,12 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
           </div>
         )}
 
-        {tracker.mode === 'FONCTIONNEL' && (
-          <div onClick={() => handleModeChange(tracker.mode, tracker.id)}>
+        {trackerMode === 'FONCTIONNEL' && (
+          <div
+            onClick={() =>
+              setTrackerMode(handleModeChange(trackerMode, tracker.id))
+            }
+          >
             <FontAwesomeIcon
               icon={faPlay}
               className="tracker-mode-icon"
@@ -78,8 +95,12 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
             />
           </div>
         )}
-        {tracker.mode === 'PAUSE' && (
-          <div onClick={() => handleModeChange(tracker.mode, tracker.id)}>
+        {trackerMode === 'PAUSE' && (
+          <div
+            onClick={() =>
+              setTrackerMode(handleModeChange(trackerMode, tracker.id))
+            }
+          >
             <FontAwesomeIcon
               icon={faPause}
               className="tracker-mode-icon"
@@ -87,8 +108,12 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
             />
           </div>
         )}
-        {tracker.mode === 'TRACKING' && (
-          <div onClick={() => handleModeChange(tracker.mode, tracker.id)}>
+        {trackerMode === 'TRACKING' && (
+          <div
+            onClick={() =>
+              setTrackerMode(handleModeChange(trackerMode, tracker.id))
+            }
+          >
             <FontAwesomeIcon
               icon={faCrosshairs}
               className="tracker-mode-icon"

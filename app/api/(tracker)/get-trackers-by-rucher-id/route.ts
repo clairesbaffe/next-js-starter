@@ -15,6 +15,9 @@ export async function GET(request: Request) {
         where: {
           rucher_id: parseInt(rucher_id),
         },
+        orderBy: {
+          id: 'asc',
+        },
       });
 
       return NextResponse.json({ trackers }, { status: 200 });
