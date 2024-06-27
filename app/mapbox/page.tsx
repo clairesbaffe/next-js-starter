@@ -10,7 +10,7 @@ export default function Page() {
   let geojson: any;
   async function fetchTrackers() {
     const response = await fetch(
-      'http://localhost:3000/api/get-trackers-by-rucher-id?rucher_id=1',
+      'https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id?rucher_id=1',
     );
     const data = await response.json();
     return data;
@@ -18,7 +18,7 @@ export default function Page() {
 
   async function fetchLocations(tracker_id: number) {
     const response = await fetch(
-      `http://localhost:3000/api/get-locations-by-tracker-id?tracker_id=${tracker_id}`,
+      `https://next-js-starter-lyart.vercel.app/api/get-locations-by-tracker-id?tracker_id=${tracker_id}`,
     );
     const data = await response.json();
 
@@ -39,7 +39,6 @@ export default function Page() {
       tracker.locations = response.locations;
     });
 
-    // Attendre que toutes les promesses soient résolues
     await Promise.all(locationPromises);
 
     loadMap();
