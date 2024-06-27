@@ -4,7 +4,7 @@ import { revalidateTag } from 'next/cache';
 
 async function fetchTrackers() {
   const response = await fetch(
-    'https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id?rucher_id=1',
+    `${process.env.API_URL}/api/get-trackers-by-rucher-id?rucher_id=1`,
   );
   const data = await response.json();
   return data;
@@ -12,7 +12,7 @@ async function fetchTrackers() {
 
 async function fetchRucher(rucher_id: Number) {
   const response = await fetch(
-    `https://next-js-starter-lyart.vercel.app/api/get-rucher-by-id?rucher_id=${rucher_id}`,
+    `${process.env.API_URL}/api/get-rucher-by-id?rucher_id=${rucher_id}`,
   );
   const data = await response.json();
   return data;
