@@ -28,33 +28,46 @@ function renderModeDescription(mode: string): string {
   }
 }
 
-async function handleModeChange(mode: string, tracker_id: number) {
-  console.log('Changing mode...');
+async function handleModeChange(
+  current_mode: string,
+  tracker_id: number,
+  change_to_specified_mode: boolean,
+) {
   let new_mode;
-  switch (mode) {
-    case 'INACTIF':
-      new_mode = 'FONCTIONNEL';
-      break;
-    case 'FONCTIONNEL':
-      new_mode = 'PAUSE';
-      break;
-    case 'PAUSE':
-      new_mode = 'FONCTIONNEL';
-      break;
-    case 'TRACKING':
-      new_mode = 'FONCTIONNEL';
-      break;
+  if (change_to_specified_mode) {
+    new_mode = current_mode;
+  } else {
+    switch (current_mode) {
+      case 'INACTIF':
+        new_mode = 'FONCTIONNEL';
+        break;
+      case 'FONCTIONNEL':
+        new_mode = 'PAUSE';
+        break;
+      case 'PAUSE':
+        new_mode = 'FONCTIONNEL';
+        break;
+      case 'TRACKING':
+        new_mode = 'FONCTIONNEL';
+        break;
+    }
   }
-  console.log('Determined mode, trying to fetch');
 
   await fetch(
     `http://localhost:3000/api/update-tracker?id=${tracker_id}&mode=${new_mode}`,
   );
-  console.log('Fetched');
 
   window.location.reload();
 
   return new_mode;
+}
+
+async function handleTrackerDelete(tracker_id: number) {
+  await fetch(
+    `http://localhost:3000/api/delete-tracker-by-id?id=${tracker_id}&reset=true`,
+  );
+
+  window.location.reload();
 }
 
 export default function TrackerItem({ tracker }: { tracker: any }) {
@@ -81,7 +94,14 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
             contentStyle={{ width: 'fit-content' }}
           >
             <div>
-              <button className="tracker-menu-button">
+              <button
+                className="tracker-menu-button"
+                onClick={() =>
+                  setTrackerMode(
+                    handleModeChange('FONCTIONNEL', tracker.id, true),
+                  )
+                }
+              >
                 <FontAwesomeIcon
                   icon={faPlay}
                   className="mini-tracker-mode-icon"
@@ -89,7 +109,12 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
                 />
                 Mettre en marche
               </button>
-              <button className="tracker-menu-button">
+              <button
+                className="tracker-menu-button"
+                onClick={() =>
+                  setTrackerMode(handleModeChange('PAUSE', tracker.id, true))
+                }
+              >
                 <FontAwesomeIcon
                   icon={faPause}
                   className="mini-tracker-mode-icon"
@@ -97,7 +122,12 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
                 />
                 Mettre en pause
               </button>
-              <button className="tracker-menu-button">
+              <button
+                className="tracker-menu-button"
+                onClick={() =>
+                  setTrackerMode(handleModeChange('INACTIF', tracker.id, true))
+                }
+              >
                 <FontAwesomeIcon
                   icon={faPowerOff}
                   className="mini-tracker-mode-icon"
@@ -106,7 +136,10 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
                 Eteindre
               </button>
               <hr />
-              <button className="tracker-menu-button">
+              <button
+                className="tracker-menu-button"
+                onClick={() => setTrackerMode(handleTrackerDelete(tracker.id))}
+              >
                 <FontAwesomeIcon
                   icon={faTrash}
                   className="mini-tracker-mode-icon"
@@ -121,7 +154,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         {trackerMode === 'INACTIF' && (
           <div
             onClick={() =>
-              setTrackerMode(handleModeChange(trackerMode, tracker.id))
+              setTrackerMode(handleModeChange(trackerMode, tracker.id, false))
             }
           >
             <FontAwesomeIcon
@@ -135,7 +168,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         {trackerMode === 'FONCTIONNEL' && (
           <div
             onClick={() =>
-              setTrackerMode(handleModeChange(trackerMode, tracker.id))
+              setTrackerMode(handleModeChange(trackerMode, tracker.id, false))
             }
           >
             <FontAwesomeIcon
@@ -148,7 +181,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         {trackerMode === 'PAUSE' && (
           <div
             onClick={() =>
-              setTrackerMode(handleModeChange(trackerMode, tracker.id))
+              setTrackerMode(handleModeChange(trackerMode, tracker.id, false))
             }
           >
             <FontAwesomeIcon
@@ -161,7 +194,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         {trackerMode === 'TRACKING' && (
           <div
             onClick={() =>
-              setTrackerMode(handleModeChange(trackerMode, tracker.id))
+              setTrackerMode(handleModeChange(trackerMode, tracker.id, false))
             }
           >
             <FontAwesomeIcon
