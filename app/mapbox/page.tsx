@@ -9,14 +9,16 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY;
 export default function Page() {
   let geojson: any;
   async function fetchTrackers() {
-    const response = await fetch(`/api/get-trackers-by-rucher-id?rucher_id=1`);
+    const response = await fetch(
+      `https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id?rucher_id=1`,
+    );
     const data = await response.json();
     return data;
   }
 
   async function fetchLocations(tracker_id: number) {
     const response = await fetch(
-      `/api/get-locations-by-tracker-id?tracker_id=${tracker_id}`,
+      `https://next-js-starter-lyart.vercel.app/api/get-locations-by-tracker-id?tracker_id=${tracker_id}`,
     );
     const data = await response.json();
 

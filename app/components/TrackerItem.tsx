@@ -53,7 +53,9 @@ async function handleModeChange(
     }
   }
 
-  await fetch(`/api/update-tracker?id=${tracker_id}&mode=${new_mode}`);
+  await fetch(
+    `https://next-js-starter-lyart.vercel.app/api/update-tracker?id=${tracker_id}&mode=${new_mode}`,
+  );
 
   window.location.reload();
 
@@ -61,7 +63,9 @@ async function handleModeChange(
 }
 
 async function handleTrackerDelete(tracker_id: number) {
-  await fetch(`/api/delete-tracker-by-id?id=${tracker_id}&reset=true`);
+  await fetch(
+    `https://next-js-starter-lyart.vercel.app/api/delete-tracker-by-id?id=${tracker_id}&reset=true`,
+  );
 
   window.location.reload();
 }
