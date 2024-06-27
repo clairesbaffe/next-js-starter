@@ -29,11 +29,6 @@ export default function Page() {
     const trackers = await fetchTrackers();
     geojson = trackers.trackers;
 
-    // await geojson.forEach(async (tracker: any) => {
-    //   await fetchLocations(tracker.id).then((response) => {
-    //     tracker.locations = response.locations;
-    //   });
-    // });
     const locationPromises = geojson.map(async (tracker: any) => {
       const response = await fetchLocations(tracker.id);
       tracker.locations = response.locations;
@@ -45,8 +40,6 @@ export default function Page() {
   }
 
   async function loadMap() {
-    console.log('Loading map...');
-
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -55,18 +48,45 @@ export default function Page() {
     });
 
     geojson.forEach((tracker: any) => {
-      tracker.locations.forEach((location: any, index: Number) => {
-        const el = document.createElement('div');
-        if (index == geojson.length - 1) el.className = 'last-marker';
-        else el.className = 'previous-marker';
-        const coordinates = [location.longitude, location.latitude];
-        new mapboxgl.Marker(el)
-          .setLngLat(coordinates)
-          .setPopup(
-            new mapboxgl.Popup({ offset: 25 }).setHTML(`${tracker.nom}`),
-          )
-          .addTo(map);
-      });
+      if (tracker.locations.length > 0) {
+        if (tracker.mode === 'TRACKING') {
+          tracker.locations.forEach((location: any, index: Number) => {
+            const el = document.createElement('div');
+            if (index == geojson.length - 1) el.className = 'last-marker';
+            else el.className = 'previous-marker marker';
+            const coordinates = [location.longitude, location.latitude];
+            new mapboxgl.Marker(el)
+              .setLngLat(coordinates)
+              .setPopup(
+                new mapboxgl.Popup({ offset: 25 }).setHTML(`${tracker.nom}`),
+              )
+              .addTo(map);
+          });
+        } else {
+          const last_location = tracker.locations.pop();
+          const el = document.createElement('div');
+
+          switch (tracker.mode) {
+            case 'INACTIF':
+              el.className = 'off-marker marker';
+              break;
+            case 'FONCTIONNEL':
+              el.className = 'on-marker marker';
+              break;
+            case 'PAUSE':
+              el.className = 'pause-marker marker';
+              break;
+          }
+
+          const coordinates = [last_location.longitude, last_location.latitude];
+          new mapboxgl.Marker(el)
+            .setLngLat(coordinates)
+            .setPopup(
+              new mapboxgl.Popup({ offset: 25 }).setHTML(`${tracker.nom}`),
+            )
+            .addTo(map);
+        }
+      }
     });
 
     map.addControl(
