@@ -9,9 +9,11 @@ import {
   faPlay,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function renderModeDescription(mode: string): string {
   switch (mode) {
@@ -63,19 +65,33 @@ async function handleModeChange(
 }
 
 async function handleTrackerDelete(tracker_id: number) {
-  await fetch(
-    `https://next-js-starter-lyart.vercel.app/api/delete-tracker-by-id?id=${tracker_id}&reset=true`,
-  );
+  // await fetch(
+  //   `https://next-js-starter-lyart.vercel.app/api/delete-tracker-by-id?id=${tracker_id}&reset=true`,
+  // );
+
+  localStorage.setItem('showToast', 'true');
 
   window.location.reload();
 }
 
 export default function TrackerItem({ tracker }: { tracker: any }) {
   const [trackerMode, setTrackerMode] = useState(tracker.mode);
+  const notify = () => toast(`Le tracker a été supprimé`);
+
+  useEffect(() => {
+    if (localStorage.getItem('showToast')) {
+      console.log('toasting');
+      toast('Le tracker a été supprimé');
+
+      localStorage.removeItem('showToast');
+    }
+  }, []);
 
   return (
     <div className="tracker-container">
       <div className="left-side">
+        {/* <button onClick={notify}>Notify!</button> */}
+        <ToastContainer />
         <h1>{tracker.nom}</h1>
         <p>{renderModeDescription(trackerMode)}</p>
         <p>Rucher : {tracker.rucher.rucher.nom}</p>
