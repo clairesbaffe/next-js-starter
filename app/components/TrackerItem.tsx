@@ -7,8 +7,11 @@ import {
   faPause,
   faPowerOff,
   faPlay,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 function renderModeDescription(mode: string): string {
   switch (mode) {
@@ -45,7 +48,7 @@ async function handleModeChange(mode: string, tracker_id: number) {
   console.log('Determined mode, trying to fetch');
 
   await fetch(
-    `https://next-js-starter-lyart.vercel.app/api/update-tracker?id=${tracker_id}&mode=${new_mode}`,
+    `http://localhost:3000/api/update-tracker?id=${tracker_id}&mode=${new_mode}`,
   );
   console.log('Fetched');
 
@@ -66,7 +69,54 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         <p>ID : {tracker.id}</p>
       </div>
       <div className="right-side">
-        <FontAwesomeIcon className="tracker-menu-icon" icon={faEllipsis} />
+        <div>
+          <Popup
+            trigger={
+              <FontAwesomeIcon
+                className="tracker-menu-icon"
+                icon={faEllipsis}
+              />
+            }
+            position="bottom right"
+            contentStyle={{ width: 'fit-content' }}
+          >
+            <div>
+              <button className="tracker-menu-button">
+                <FontAwesomeIcon
+                  icon={faPlay}
+                  className="mini-tracker-mode-icon"
+                  id="on-mode"
+                />
+                Mettre en marche
+              </button>
+              <button className="tracker-menu-button">
+                <FontAwesomeIcon
+                  icon={faPause}
+                  className="mini-tracker-mode-icon"
+                  id="pause-mode"
+                />
+                Mettre en pause
+              </button>
+              <button className="tracker-menu-button">
+                <FontAwesomeIcon
+                  icon={faPowerOff}
+                  className="mini-tracker-mode-icon"
+                  id="off-mode"
+                />
+                Eteindre
+              </button>
+              <hr />
+              <button className="tracker-menu-button">
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  className="mini-tracker-mode-icon"
+                  id="tracking-mode"
+                />
+                Supprimer le tracker
+              </button>
+            </div>
+          </Popup>
+        </div>
 
         {trackerMode === 'INACTIF' && (
           <div
