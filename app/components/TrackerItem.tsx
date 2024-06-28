@@ -78,7 +78,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
       <div className="left-side">
         <h1>{tracker.nom}</h1>
         <p>{renderModeDescription(trackerMode)}</p>
-        <p>Rucher : {tracker.rucher.rucher.nom}</p>
+        <p>Ruche : {tracker.ruche.nom}</p>
         <p>ID : {tracker.id}</p>
       </div>
       <div className="right-side">
