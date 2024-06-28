@@ -8,17 +8,10 @@ const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY;
 export default function Page() {
   let geojson: any;
-  async function fetchTrackers() {
-    const response = await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id?rucher_id=1`,
-    );
-    const data = await response.json();
-    return data;
-  }
 
-  async function fetchLocations(tracker_id: number) {
+  async function fetchLocationsByRucher(rucher_id: number) {
     const response = await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/get-locations-by-tracker-id?tracker_id=${tracker_id}`,
+      `https://next-js-starter-lyart.vercel.app/api/get-locations-by-rucher-id?rucher_id=${rucher_id}`,
     );
     const data = await response.json();
 
@@ -26,15 +19,8 @@ export default function Page() {
   }
 
   async function initialiseMap() {
-    const trackers = await fetchTrackers();
-    geojson = trackers.trackers;
-
-    const locationPromises = geojson.map(async (tracker: any) => {
-      const response = await fetchLocations(tracker.id);
-      tracker.locations = response.locations;
-    });
-
-    await Promise.all(locationPromises);
+    const locations = await fetchLocationsByRucher(1);
+    geojson = locations.trackers;
 
     loadMap();
   }
@@ -48,9 +34,9 @@ export default function Page() {
     });
 
     geojson.forEach((tracker: any) => {
-      if (tracker.locations.length > 0) {
+      if (tracker.historiques.length > 0) {
         if (tracker.mode === 'TRACKING') {
-          tracker.locations.forEach((location: any, index: Number) => {
+          tracker.historiques.forEach((location: any, index: Number) => {
             const el = document.createElement('div');
             if (index == geojson.length - 1) el.className = 'last-marker';
             else el.className = 'previous-marker marker';
@@ -63,7 +49,7 @@ export default function Page() {
               .addTo(map);
           });
         } else {
-          const last_location = tracker.locations.pop();
+          const last_location = tracker.historiques.pop();
           const el = document.createElement('div');
 
           switch (tracker.mode) {
