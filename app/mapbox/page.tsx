@@ -11,7 +11,7 @@ export default function Page() {
 
   async function fetchLocationsByRucher(rucher_id: number) {
     const response = await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/get-locations-by-rucher-id?rucher_id=${rucher_id}`,
+      `https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id-with-locations?rucher_id=${rucher_id}`,
     );
     const data = await response.json();
 
