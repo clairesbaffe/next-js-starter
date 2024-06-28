@@ -13,10 +13,15 @@ export async function GET(request: Request) {
     else {
       const trackers = await prisma.tracker.findMany({
         where: {
-          rucher_id: parseInt(rucher_id),
+          ruche: {
+            rucher_id: parseInt(rucher_id),
+          },
         },
         orderBy: {
           id: 'asc',
+        },
+        include: {
+          ruche: true,
         },
       });
 

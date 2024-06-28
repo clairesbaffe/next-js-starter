@@ -6,20 +6,23 @@ const prisma = new PrismaClient();
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const nom = searchParams.get('nom');
-  const rucher_id = searchParams.get('rucher_id');
+  const ruche_id = searchParams.get('ruche_id');
 
   try {
-    if (!nom || !rucher_id) throw new Error('Nom et id de rucher requis');
+    if (!nom || !ruche_id) throw new Error('Nom et id de ruche requis');
     else {
       await prisma.tracker.create({
         data: {
           nom: nom,
-          rucher_id: parseInt(rucher_id),
+          ruche_id: parseInt(ruche_id),
           mode: 'INACTIF',
         },
       });
 
-      return NextResponse.json(`Tracker ${nom} créé`, { status: 200 });
+      return NextResponse.json(
+        `Tracker ${nom} créé pour la ruche ${ruche_id}`,
+        { status: 200 },
+      );
     }
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
