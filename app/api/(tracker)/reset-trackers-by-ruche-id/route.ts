@@ -6,23 +6,23 @@ const prisma = new PrismaClient();
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const reset = searchParams.get('reset');
-  const rucher_id = searchParams.get('rucher_id');
+  const ruche_id = searchParams.get('ruche_id');
 
   try {
     if (!reset || reset != 'true') {
       throw new Error('Confirmation de réinitialisation nécessaire');
     } else {
-      if (!rucher_id) {
-        throw new Error('Id de rucher requis');
+      if (!ruche_id) {
+        throw new Error('Id de ruche requis');
       } else {
         await prisma.tracker.deleteMany({
           where: {
-            rucher_id: parseInt(rucher_id),
+            ruche_id: parseInt(ruche_id),
           },
         });
 
         return NextResponse.json(
-          `Les trackers du rucher ${rucher_id} ont été effacés`,
+          `Les trackers de la ruche ${ruche_id} ont été effacés`,
           {
             status: 200,
           },
