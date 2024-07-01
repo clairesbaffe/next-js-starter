@@ -41,6 +41,9 @@ export default function Page() {
           const locations = tracker.historiques.filter((location: any) => {
             return new Date(location.date_ajout) > dateModification;
           });
+          if (locations.length === 0) {
+            locations.push(tracker.historiques.pop());
+          }
 
           locations.forEach((location: any, index: Number) => {
             const el = document.createElement('div');
