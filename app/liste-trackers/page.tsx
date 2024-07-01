@@ -1,11 +1,11 @@
 import './style.css';
-import TrackerItem from '../components/TrackerItem';
 import TrackerForm from '../components/TrackerForm';
+import TrackersList from '../components/TrackersList';
 import { revalidateTag } from 'next/cache';
 
 async function fetchTrackers() {
   const response = await fetch(
-    `https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id?rucher_id=1`,
+    `http://localhost:3000/api/get-trackers-by-rucher-id?rucher_id=1,2`,
   );
   const data = await response.json();
   return data.trackers;
@@ -19,11 +19,7 @@ export default async function Page() {
     <div className="space-y-8">
       <h1 className="text-xl font-medium text-gray-300">Trackers</h1>
 
-      <div className="trackers-list">
-        {trackers.map((tracker: any) => (
-          <TrackerItem key={tracker.id} tracker={tracker} />
-        ))}
-      </div>
+      <TrackersList initialTrackers={trackers} />
 
       <TrackerForm />
     </div>
