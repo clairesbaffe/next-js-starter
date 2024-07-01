@@ -1,0 +1,11 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  align-items: center;
+}
+
+.formLabel {
+  display: inline-block;
+  width: 6vw;
+}

@@ -1,5 +1,6 @@
 import './style.css';
 import TrackerItem from '../components/TrackerItem';
+import TrackerForm from '../components/TrackerForm';
 import { revalidateTag } from 'next/cache';
 
 async function fetchTrackers() {
@@ -23,6 +24,8 @@ export default async function Page() {
           <TrackerItem key={tracker.id} tracker={tracker} />
         ))}
       </div>
+
+      <TrackerForm />
     </div>
   );
 }
