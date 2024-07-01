@@ -12,6 +12,8 @@ import {
 import { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import Modal from 'react-modal';
+import styles from './Modal.module.css';
 
 function renderModeDescription(mode: string): string {
   switch (mode) {
@@ -72,6 +74,15 @@ async function handleTrackerDelete(tracker_id: number) {
 
 export default function TrackerItem({ tracker }: { tracker: any }) {
   const [trackerMode, setTrackerMode] = useState(tracker.mode);
+  const [modalDeleteTrackerIsOpen, setModalDeleteTrackerIsOpen] =
+    useState(false);
+
+  const openModalDeleteTracker = () => {
+    setModalDeleteTrackerIsOpen(true);
+  };
+  const closeModalDeleteTracker = () => {
+    setModalDeleteTrackerIsOpen(false);
+  };
 
   return (
     <div className="tracker-container">
@@ -138,7 +149,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
               <hr />
               <button
                 className="tracker-menu-button"
-                onClick={() => setTrackerMode(handleTrackerDelete(tracker.id))}
+                onClick={openModalDeleteTracker}
               >
                 <FontAwesomeIcon
                   icon={faTrash}
@@ -150,6 +161,25 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
             </div>
           </Popup>
         </div>
+
+        <Modal
+          isOpen={modalDeleteTrackerIsOpen}
+          onRequestClose={closeModalDeleteTracker}
+          contentLabel="Example Modal"
+          ariaHideApp={false}
+          className={styles.modalContainer}
+          overlayClassName={styles.modalOverlay}
+        >
+          <p>Supprimer le tracker ?</p>
+          <button onClick={closeModalDeleteTracker}>Non</button>
+          <button
+            onClick={() => {
+              handleTrackerDelete(tracker.id);
+            }}
+          >
+            Oui
+          </button>
+        </Modal>
 
         {trackerMode === 'INACTIF' && (
           <div
