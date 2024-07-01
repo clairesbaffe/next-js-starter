@@ -6,8 +6,9 @@ import { FaPowerOff, FaPlay, FaPause } from 'react-icons/fa';
 import { MdOutlineMyLocation } from 'react-icons/md';
 
 import TrackerItem from '../components/TrackerItem';
+import { TrackersListProps } from './types';
 
-function TrackersList({ initialTrackers }) {
+function TrackersList({ initialTrackers }: TrackersListProps) {
   const [trackers, setTrackers] = useState(initialTrackers);
   const [ruchers, setRuchers] = useState('');
   const [mode, setMode] = useState('');
