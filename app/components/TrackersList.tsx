@@ -26,9 +26,9 @@ function TrackersList({ initialTrackers }) {
     });
   };
 
-  const handleModeFilterChange = (filter: any) => {
-    if (filter === 'Tous') setMode('');
-    else setMode(filter);
+  const handleModeFilterChange = (event: any) => {
+    const filter = event.target.value;
+    setMode(filter);
   };
 
   // récupérer les noms des ruchers
@@ -72,7 +72,17 @@ function TrackersList({ initialTrackers }) {
       </div>
 
       <div>
-        <label key={'Tous'}>
+        <select name="mode" id="mode" onChange={handleModeFilterChange}>
+          <option value="">Tous</option>
+          {filterModes.map((modeValue: any) => (
+            // <div>
+            <option key={modeValue} value={modeValue}>
+              {modeValue}
+            </option>
+          ))}
+        </select>
+
+        {/* <label key={'Tous'}>
           <input
             type="radio"
             value={'Tous'}
@@ -93,7 +103,7 @@ function TrackersList({ initialTrackers }) {
             />
             {modeValue}
           </label>
-        ))}
+        ))} */}
       </div>
 
       <div className="trackers-list">
