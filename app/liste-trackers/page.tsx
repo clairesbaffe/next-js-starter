@@ -5,7 +5,7 @@ import { revalidateTag } from 'next/cache';
 
 async function fetchTrackers() {
   const response = await fetch(
-    `http://localhost:3000/api/get-trackers-by-rucher-id?rucher_id=1,2`,
+    `https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id?rucher_id=1,2`,
   );
   const data = await response.json();
   return data.trackers;
