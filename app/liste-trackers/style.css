@@ -35,6 +35,7 @@ label {
 
 .tracker-menu-icon {
   width: 1.2vw;
+  cursor: pointer;
 }
 
 .tracker-mode-icon {
@@ -42,6 +43,7 @@ label {
   width: 1.2vw;
   padding: 6px;
   border-radius: 100%;
+  cursor: pointer;
 }
 
 #tracking-mode {
@@ -61,11 +63,6 @@ label {
   background-color: rgb(0, 128, 0, 0.25);
 }
 
-.tracker-menu-popup {
-  width: 20px;
-  background-color: red;
-}
-
 .mini-tracker-mode-icon {
   height: 0.5vw;
   width: 0.5vw;
@@ -79,8 +76,4 @@ label {
   align-items: center;
   font-size: 1vw;
   margin: 0.3vw;
-}
-
-.modalContainer {
-  background-color: red;
 }
