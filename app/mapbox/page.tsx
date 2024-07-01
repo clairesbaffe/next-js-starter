@@ -36,15 +36,25 @@ export default function Page() {
     geojson.forEach((tracker: any) => {
       if (tracker.historiques.length > 0) {
         if (tracker.mode === 'TRACKING') {
-          tracker.historiques.forEach((location: any, index: Number) => {
+          // FILTRER UNIQUEMENT LES LOCALISATIONS ENREGISTREES PENDANT LE MODE TRACKING
+          const dateModification = new Date(tracker.date_modification);
+          const locations = tracker.historiques.filter((location: any) => {
+            return new Date(location.date_ajout) > dateModification;
+          });
+
+          locations.forEach((location: any, index: Number) => {
             const el = document.createElement('div');
-            if (index == geojson.length - 1) el.className = 'last-marker';
+            if (index == locations.length - 1) el.className = 'last-marker';
             else el.className = 'previous-marker marker';
             const coordinates = [location.longitude, location.latitude];
             new mapboxgl.Marker(el)
               .setLngLat(coordinates)
               .setPopup(
-                new mapboxgl.Popup({ offset: 25 }).setHTML(`${tracker.nom}`),
+                new mapboxgl.Popup({ offset: 25 }).setHTML(`
+                  <h1>${tracker.nom}, ${tracker.ruche.nom}</h1>
+                  <p>${tracker.mode}</p>
+                  <p>${new Date(location.date_ajout).toLocaleTimeString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                `),
               )
               .addTo(map);
           });
@@ -68,7 +78,10 @@ export default function Page() {
           new mapboxgl.Marker(el)
             .setLngLat(coordinates)
             .setPopup(
-              new mapboxgl.Popup({ offset: 25 }).setHTML(`${tracker.nom}`),
+              new mapboxgl.Popup({ offset: 25 }).setHTML(`
+                <h1>${tracker.nom}</h1>
+                <p>${tracker.mode}</p>
+                `),
             )
             .addTo(map);
         }
