@@ -10,23 +10,30 @@ export async function GET(request: Request) {
 
   try {
     if (!rucher_id) throw new Error('Id du rucher requis');
-    else {
-      const trackers = await prisma.tracker.findMany({
-        where: {
-          ruche: {
-            rucher_id: parseInt(rucher_id),
+
+    const rucherIds = rucher_id.split(',').map((id) => parseInt(id));
+    const trackers = await prisma.tracker.findMany({
+      where: {
+        ruche: {
+          rucher_id: {
+            in: rucherIds,
           },
         },
-        orderBy: {
-          id: 'asc',
+      },
+      orderBy: {
+        id: 'asc',
+      },
+      include: {
+        historiques: true,
+        ruche: {
+          include: {
+            rucher: true,
+          },
         },
-        include: {
-          historiques: true,
-        },
-      });
+      },
+    });
 
-      return NextResponse.json({ trackers }, { status: 200 });
-    }
+    return NextResponse.json({ trackers }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   } finally {
