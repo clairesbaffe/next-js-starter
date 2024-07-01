@@ -5,28 +5,34 @@ import TrackerItem from '../components/TrackerItem';
 
 function TrackersList({ initialTrackers }) {
   const [trackers, setTrackers] = useState(initialTrackers);
-  const [selectedFilters, setSelectedFilters] = useState('');
+  const [ruchers, setRuchers] = useState('');
+  const [mode, setMode] = useState('');
 
   // filteredTrackers change à chaque changement de filtre grâce au useState sur le filtre
   const filteredTrackers = trackers.filter(
     (tracker: any) =>
-      selectedFilters.length === 0 ||
-      selectedFilters.includes(tracker.ruche.rucher.nom),
+      (ruchers.length === 0 || ruchers.includes(tracker.ruche.rucher.nom)) &&
+      (mode.length === 0 || tracker.mode === mode),
   );
 
-  // si le filtre est dans prevFilters, l'enlever, sinon l'ajouter
-  const handleFilterChange = (filter: any) => {
-    setSelectedFilters((prevFilters: any) => {
-      if (prevFilters.includes(filter)) {
-        return prevFilters.filter((f: any) => f !== filter);
+  // si le filtre est dans prevRucherFilters, l'enlever, sinon l'ajouter
+  const handleRucherFilterChange = (filter: any) => {
+    setRuchers((prevRucherFilters: any) => {
+      if (prevRucherFilters.includes(filter)) {
+        return prevRucherFilters.filter((f: any) => f !== filter);
       } else {
-        return [...prevFilters, filter];
+        return [...prevRucherFilters, filter];
       }
     });
   };
 
+  const handleModeFilterChange = (filter: any) => {
+    if (filter === 'Tous') setMode('');
+    else setMode(filter);
+  };
+
   // récupérer les noms des ruchers
-  let getFilteredOptions = (initialTrackers: any) => {
+  let getFilteredRuchers = (initialTrackers: any) => {
     let unique_values = initialTrackers
       .map((tracker: any) => tracker.ruche.rucher.nom)
       .filter(
@@ -35,21 +41,57 @@ function TrackersList({ initialTrackers }) {
       );
     return unique_values;
   };
-  const filterOptions: any = getFilteredOptions(initialTrackers);
+  const filterRuchers: any = getFilteredRuchers(initialTrackers);
+
+  let getFilteredModes = (initialTrackers: any) => {
+    let unique_values = initialTrackers
+      .map((tracker: any) => tracker.mode)
+      .filter(
+        (value: any, index: number, current_value: any) =>
+          current_value.indexOf(value) === index,
+      );
+    return unique_values;
+  };
+  const filterModes: any = getFilteredModes(initialTrackers);
 
   return (
     <div>
       <div>
-        {filterOptions.map((filter: any) => (
-          <label key={filter}>
+        {filterRuchers.map((rucher: any) => (
+          <label key={rucher}>
             <input
               type="checkbox"
-              value={filter}
-              checked={selectedFilters.includes(filter)}
-              onChange={() => handleFilterChange(filter)}
+              value={rucher}
+              checked={ruchers.includes(rucher)}
+              onChange={() => handleRucherFilterChange(rucher)}
               className="checkbox-class"
             />
-            {filter}
+            {rucher}
+          </label>
+        ))}
+      </div>
+
+      <div>
+        <label key={'Tous'}>
+          <input
+            type="radio"
+            value={'Tous'}
+            checked={mode === ''}
+            onChange={() => handleModeFilterChange('Tous')}
+            className="radio-class"
+          />
+          Tous
+        </label>
+        {filterModes.map((modeValue: any) => (
+          <label key={modeValue}>
+            <input
+              type="radio"
+              value={modeValue}
+              checked={mode === modeValue}
+              onChange={() => handleModeFilterChange(modeValue)}
+              className="radio-class"
+            />
+            {modeValue}
           </label>
         ))}
       </div>
