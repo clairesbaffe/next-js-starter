@@ -9,3 +9,28 @@
   display: inline-block;
   width: 6vw;
 }
+
+/* ------------------------- FILTERS ---------------------------- */
+
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+
+  margin: 2vh;
+}
+.filterContainer h1 {
+  font-size: large;
+  font-weight: bold;
+}
+
+.rucherFilterGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin: 1vh;
+  font-size: medium;
+}
+.rucherFilterGroup input {
+  margin-right: 1vh;
+}

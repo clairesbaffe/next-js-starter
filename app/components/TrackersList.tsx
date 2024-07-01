@@ -1,6 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Select from 'react-select';
+import { FaPowerOff, FaPlay, FaPause } from 'react-icons/fa';
+import { MdOutlineMyLocation } from 'react-icons/md';
+
 import TrackerItem from '../components/TrackerItem';
 
 function TrackersList({ initialTrackers }) {
@@ -8,14 +12,14 @@ function TrackersList({ initialTrackers }) {
   const [ruchers, setRuchers] = useState('');
   const [mode, setMode] = useState('');
 
-  // filteredTrackers change à chaque changement de filtre grâce au useState sur le filtre
+  // UPDATE TRACKERS LIST AT ANY MOMENT WITH USESTATE
   const filteredTrackers = trackers.filter(
     (tracker: any) =>
       (ruchers.length === 0 || ruchers.includes(tracker.ruche.rucher.nom)) &&
       (mode.length === 0 || tracker.mode === mode),
   );
 
-  // si le filtre est dans prevRucherFilters, l'enlever, sinon l'ajouter
+  // HANDLE CHANGE ON FILTERS
   const handleRucherFilterChange = (filter: any) => {
     setRuchers((prevRucherFilters: any) => {
       if (prevRucherFilters.includes(filter)) {
@@ -26,12 +30,13 @@ function TrackersList({ initialTrackers }) {
     });
   };
 
-  const handleModeFilterChange = (event: any) => {
-    const filter = event.target.value;
-    setMode(filter);
+  const handleModeFilterChange = (selectedOption: any) => {
+    const filter = selectedOption ? selectedOption.value : '';
+    if (filter === 'Tous') setMode('');
+    else setMode(filter);
   };
 
-  // récupérer les noms des ruchers
+  // SET OPTIONS
   let getFilteredRuchers = (initialTrackers: any) => {
     let unique_values = initialTrackers
       .map((tracker: any) => tracker.ruche.rucher.nom)
@@ -53,57 +58,80 @@ function TrackersList({ initialTrackers }) {
     return unique_values;
   };
   const filterModes: any = getFilteredModes(initialTrackers);
+  filterModes.unshift('Tous');
+
+  // SELECT MODES DESIGN
+  function getModeDescriptionWithIcon(mode: string) {
+    switch (mode) {
+      case 'INACTIF':
+        return (
+          <div className="modeFilterSelectOption">
+            <FaPowerOff className="select-tracker-mode-icon" id="off-mode" />{' '}
+            Eteint
+          </div>
+        );
+      case 'FONCTIONNEL':
+        return (
+          <div className="modeFilterSelectOption">
+            <FaPlay className="select-tracker-mode-icon" id="on-mode" /> En
+            marche
+          </div>
+        );
+      case 'PAUSE':
+        return (
+          <div className="modeFilterSelectOption">
+            <FaPause className="select-tracker-mode-icon" id="pause-mode" /> En
+            pause
+          </div>
+        );
+      case 'TRACKING':
+        return (
+          <div className="modeFilterSelectOption">
+            <MdOutlineMyLocation
+              className="select-tracker-mode-icon"
+              id="tracking-mode"
+            />
+            En alerte
+          </div>
+        );
+      case 'Tous':
+        return <div className="modeFilterSelectOption">Tous</div>;
+      default:
+        return 'Unknown mode';
+    }
+  }
+
+  const customOptions = filterModes.map((modeValue: string) => ({
+    value: modeValue,
+    label: getModeDescriptionWithIcon(modeValue),
+  }));
 
   return (
     <div>
-      <div>
+      <div className="filterContainer">
+        <h1>Filtrer par rucher</h1>
         {filterRuchers.map((rucher: any) => (
-          <label key={rucher}>
+          <label key={rucher} className="rucherFilterGroup">
             <input
               type="checkbox"
               value={rucher}
               checked={ruchers.includes(rucher)}
               onChange={() => handleRucherFilterChange(rucher)}
-              className="checkbox-class"
+              className="checkbox-class checkbox-info checkbox"
             />
             {rucher}
           </label>
         ))}
       </div>
 
-      <div>
-        <select name="mode" id="mode" onChange={handleModeFilterChange}>
-          <option value="">Tous</option>
-          {filterModes.map((modeValue: any) => (
-            // <div>
-            <option key={modeValue} value={modeValue}>
-              {modeValue}
-            </option>
-          ))}
-        </select>
-
-        {/* <label key={'Tous'}>
-          <input
-            type="radio"
-            value={'Tous'}
-            checked={mode === ''}
-            onChange={() => handleModeFilterChange('Tous')}
-            className="radio-class"
-          />
-          Tous
-        </label>
-        {filterModes.map((modeValue: any) => (
-          <label key={modeValue}>
-            <input
-              type="radio"
-              value={modeValue}
-              checked={mode === modeValue}
-              onChange={() => handleModeFilterChange(modeValue)}
-              className="radio-class"
-            />
-            {modeValue}
-          </label>
-        ))} */}
+      <div className="filterContainer">
+        <h1>Filtrer par état</h1>
+        <Select
+          options={customOptions}
+          onChange={handleModeFilterChange}
+          name="mode"
+          id="mode"
+        />
       </div>
 
       <div className="trackers-list">
