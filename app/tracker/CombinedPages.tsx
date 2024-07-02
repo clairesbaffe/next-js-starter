@@ -15,12 +15,6 @@ function CombinedPages({ initialTrackers }: TrackersListProps) {
   const [ruchers, setRuchers] = useState('');
   const [mode, setMode] = useState('');
 
-  const [key, setKey] = useState(0);
-
-  const reloadMapComponent = () => {
-    setKey((prevKey) => prevKey + 1);
-  };
-
   // UPDATE TRACKERS LIST AT ANY MOMENT WITH USESTATE
   const filteredTrackers = trackers.filter(
     (tracker: any) =>
@@ -37,14 +31,12 @@ function CombinedPages({ initialTrackers }: TrackersListProps) {
         return [...prevRucherFilters, filter];
       }
     });
-    reloadMapComponent();
   };
 
   const handleModeFilterChange = (selectedOption: any) => {
     const filter = selectedOption ? selectedOption.value : '';
     if (filter === 'Tous') setMode('');
     else setMode(filter);
-    reloadMapComponent();
   };
 
   // SET OPTIONS
@@ -147,7 +139,7 @@ function CombinedPages({ initialTrackers }: TrackersListProps) {
 
       {/* <TrackerForm /> */}
       <div className="container">
-        <MapComponent key={key} initialTrackers={filteredTrackers} />
+        <MapComponent initialTrackers={filteredTrackers} />
         <TrackersList initialTrackers={filteredTrackers} />
       </div>
     </div>
