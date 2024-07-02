@@ -15,14 +15,10 @@ export default async function Page() {
     return data;
   }
 
-  async function initialiseMap() {
-    const locations = await fetchLocationsByRucher(1);
-    geojson = locations.trackers;
-  }
-
-  // useEffect(() => {
-  //   initialiseMap();
-  // }, []);
+  // async function initialiseMap() {
+  //   const locations = await fetchLocationsByRucher(1);
+  //   geojson = locations.trackers;
+  // }
 
   return (
     <div>

@@ -1,0 +1,145 @@
+/* ---------------------------------------- MAPBOX ---------------------------------------- */
+
+#map {
+  height: 70vh;
+  width: 100%;
+  margin-top: 2vh;
+}
+
+.marker {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.last-marker {
+  background-image: url('/marker_icon.png');
+  background-size: cover;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: -15px;
+}
+
+.previous-marker {
+  background-color: red;
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 100%;
+}
+
+.off-marker {
+  background-color: rgb(128, 128, 128);
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 100%;
+}
+
+.on-marker {
+  background-color: rgb(0, 128, 0);
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 100%;
+}
+
+.pause-marker {
+  background-color: rgb(255, 217, 0);
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 100%;
+}
+
+/*  */
+
+h1 {
+  font-size: 1.2vw;
+}
+p,
+label {
+  font-size: 0.8vw;
+}
+
+/* ---------------------------------------- LISTE DE TRACKERS ---------------------------------------- */
+
+.trackers-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tracker-container {
+  display: flex;
+  justify-content: space-between;
+
+  background-color: white;
+  color: #555555;
+
+  margin: 1.5%;
+  padding: 2%;
+  width: 30%;
+  border-radius: 10px;
+}
+
+.tracker-container .right-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tracker-menu-icon {
+  width: 1.2vw;
+  cursor: pointer;
+}
+
+.tracker-mode-icon {
+  height: 1.2vw;
+  width: 1.2vw;
+  padding: 6px;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+#tracking-mode {
+  color: rgb(255, 0, 0);
+  background-color: rgb(255, 0, 0, 0.25);
+}
+#pause-mode {
+  color: rgb(255, 217, 0);
+  background-color: rgb(255, 217, 0, 0.25);
+}
+#off-mode {
+  color: rgb(128, 128, 128);
+  background-color: rgb(128, 128, 128, 0.25);
+}
+#on-mode {
+  color: rgb(0, 128, 0);
+  background-color: rgb(0, 128, 0, 0.25);
+}
+
+.mini-tracker-mode-icon {
+  height: 0.5vw;
+  width: 0.5vw;
+  padding: 4px;
+  margin-right: 0.25vw;
+  border-radius: 100%;
+}
+
+.tracker-menu-button {
+  display: flex;
+  align-items: center;
+  font-size: 1vw;
+  margin: 0.3vw;
+}
+
+.modeFilterSelectOption {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 25vw;
+}
+
+.select-tracker-mode-icon {
+  padding: 0.5vw;
+  width: 3vw;
+  height: 3vw;
+  border-radius: 100%;
+  margin-right: 0.5vw;
+}

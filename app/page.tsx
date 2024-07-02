@@ -8,32 +8,14 @@ export default function Page() {
       <h1 className="text-xl font-medium text-gray-300">Examples</h1>
 
       <div className="space-y-10 text-white">
-        {/* <Link
-          href={`/ruches`}
+        <Link
+          href={`/tracker`}
           className="group block space-y-1.5 rounded-lg bg-gray-900 px-5 py-3 hover:bg-gray-800"
         >
           <div className="font-medium text-gray-200 group-hover:text-gray-50">
-            Ruches
+            Tracker
           </div>
         </Link>
-
-        <Link
-          href={`/form`}
-          className="group block space-y-1.5 rounded-lg bg-gray-900 px-5 py-3 hover:bg-gray-800"
-        >
-          <div className="font-medium text-gray-200 group-hover:text-gray-50">
-            Formulaire
-          </div>
-        </Link>
-
-        <Link
-          href={`/get-pets`}
-          className="group block space-y-1.5 rounded-lg bg-gray-900 px-5 py-3 hover:bg-gray-800"
-        >
-          <div className="font-medium text-gray-200 group-hover:text-gray-50">
-            Voir toutes les données
-          </div>
-        </Link> */}
 
         <Link
           href={`/mapbox`}
