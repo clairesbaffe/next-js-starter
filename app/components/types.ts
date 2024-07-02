@@ -1,3 +1,5 @@
+// types.ts
+
 export interface Rucher {
   id: number;
   nom: string;
@@ -12,6 +14,14 @@ export interface Ruche {
   rucher: Rucher;
 }
 
+export interface Historique {
+  id: number;
+  tracker_id: number;
+  latitude: number;
+  longitude: number;
+  date_ajout: string;
+}
+
 export interface Tracker {
   id: number;
   nom: string;
@@ -19,6 +29,7 @@ export interface Tracker {
   mode: string;
   date_ajout: string;
   date_modification: string;
+  historiques: Historique[];
   ruche: Ruche;
 }
 
