@@ -8,7 +8,7 @@ export default async function Page() {
 
   async function fetchLocationsByRucher(rucher_id: number[]) {
     const response = await fetch(
-      `http://localhost:3000/api/get-trackers-by-rucher-id-with-locations?rucher_id=${rucher_id.join()}`,
+      `https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id-with-locations?rucher_id=${rucher_id.join()}`,
     );
     const data = await response.json();
 
