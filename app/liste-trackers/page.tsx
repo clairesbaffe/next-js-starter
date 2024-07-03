@@ -21,7 +21,7 @@ export default async function Page() {
 
       <TrackersList initialTrackers={trackers} />
 
-      <TrackerForm />
+      {/* <TrackerForm /> */}
     </div>
   );
 }
