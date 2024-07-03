@@ -1,8 +1,9 @@
 .modalContainer {
+  position: relative;
   background-color: white;
   border-radius: 10px;
-  padding: 20px;
-  max-width: 500px;
+  padding: 30px 20px;
+  min-width: 50vw;
   margin: auto;
 }
 

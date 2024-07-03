@@ -15,7 +15,7 @@ function MapComponent({ initialTrackers }: TrackersListProps) {
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [-0.57918, 44.837789],
-      zoom: 11.5,
+      zoom: 11,
     });
 
     geojson.forEach((tracker: any) => {

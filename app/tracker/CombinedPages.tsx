@@ -2,15 +2,23 @@
 
 import { useState } from 'react';
 import Select from 'react-select';
-import { FaPowerOff, FaPlay, FaPause } from 'react-icons/fa';
-import { MdOutlineMyLocation } from 'react-icons/md';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faCrosshairs,
+  faPause,
+  faPowerOff,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
 
-import { TrackersListProps } from '../components/types';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
+import { CombinedPagesProps } from '../components/types';
 import MapComponent from '../components/MapComponent';
-import TrackerForm from '../components/TrackerForm';
 import TrackersList from '../components/TrackersList';
+import TrackerForm from '../components/TrackerForm';
 
-function CombinedPages({ initialTrackers }: TrackersListProps) {
+function CombinedPages({ initialTrackers, balances }: CombinedPagesProps) {
   const [trackers, setTrackers] = useState(initialTrackers);
   const [ruchers, setRuchers] = useState('');
   const [mode, setMode] = useState('');
@@ -69,28 +77,41 @@ function CombinedPages({ initialTrackers }: TrackersListProps) {
       case 'INACTIF':
         return (
           <div className="modeFilterSelectOption">
-            <FaPowerOff className="select-tracker-mode-icon" id="off-mode" />{' '}
+            <FontAwesomeIcon
+              icon={faPowerOff}
+              className="select-tracker-mode-icon"
+              id="off-mode"
+            />
             Eteint
           </div>
         );
       case 'FONCTIONNEL':
         return (
           <div className="modeFilterSelectOption">
-            <FaPlay className="select-tracker-mode-icon" id="on-mode" /> En
-            marche
+            <FontAwesomeIcon
+              icon={faPlay}
+              className="select-tracker-mode-icon"
+              id="on-mode"
+            />
+            En marche
           </div>
         );
       case 'PAUSE':
         return (
           <div className="modeFilterSelectOption">
-            <FaPause className="select-tracker-mode-icon" id="pause-mode" /> En
-            pause
+            <FontAwesomeIcon
+              icon={faPause}
+              className="select-tracker-mode-icon"
+              id="pause-mode"
+            />
+            En pause
           </div>
         );
       case 'TRACKING':
         return (
           <div className="modeFilterSelectOption">
-            <MdOutlineMyLocation
+            <FontAwesomeIcon
+              icon={faCrosshairs}
               className="select-tracker-mode-icon"
               id="tracking-mode"
             />
@@ -110,38 +131,50 @@ function CombinedPages({ initialTrackers }: TrackersListProps) {
   }));
 
   return (
-    <div>
-      <div className="filterContainer">
-        <h1>Filtrer par rucher</h1>
-        {filterRuchers.map((rucher: any) => (
-          <label key={rucher} className="rucherFilterGroup">
-            <input
-              type="checkbox"
-              value={rucher}
-              checked={ruchers.includes(rucher)}
-              onChange={() => handleRucherFilterChange(rucher)}
-              className="checkbox-class checkbox-info checkbox"
-            />
-            {rucher}
-          </label>
-        ))}
+    <div id="pageContainer">
+      <div className="pageLeftSide">
+        <div className="filterContainer">
+          <h1>Filtrer par rucher</h1>
+          {filterRuchers.map((rucher: any) => (
+            <label key={rucher} className="rucherFilterGroup">
+              <input
+                type="checkbox"
+                value={rucher}
+                checked={ruchers.includes(rucher)}
+                onChange={() => handleRucherFilterChange(rucher)}
+                className="checkbox-class checkbox-info checkbox"
+              />
+              {rucher}
+            </label>
+          ))}
+        </div>
+
+        <div className="filterContainer">
+          <h1>Filtrer par état</h1>
+          <Select
+            options={customOptions}
+            defaultValue={customOptions[0]}
+            onChange={handleModeFilterChange}
+            name="mode"
+            id="modeSelect"
+          />
+        </div>
       </div>
 
-      <div className="filterContainer">
-        <h1>Filtrer par état</h1>
-        <Select
-          options={customOptions}
-          onChange={handleModeFilterChange}
-          name="mode"
-          id="mode"
-        />
-      </div>
+      <Tabs className="pageRightSide">
+        <TabList>
+          <Tab>Map</Tab>
+          <Tab>Liste des trackers</Tab>
+        </TabList>
 
-      {/* <TrackerForm /> */}
-      <div className="container">
-        <MapComponent initialTrackers={filteredTrackers} />
-        <TrackersList initialTrackers={filteredTrackers} />
-      </div>
+        <TabPanel forceRender={true}>
+          <MapComponent initialTrackers={filteredTrackers} />
+        </TabPanel>
+        <TabPanel className={'trackerListPanel'}>
+          <TrackerForm balances={balances} />
+          <TrackersList initialTrackers={filteredTrackers} />
+        </TabPanel>
+      </Tabs>
     </div>
   );
 }

@@ -36,3 +36,11 @@ export interface Tracker {
 export interface TrackersListProps {
   initialTrackers: Tracker[];
 }
+
+export interface CombinedPagesProps extends TrackersListProps {
+  balances: Ruche[];
+}
+
+export interface RuchesListProps {
+  balances: Ruche[];
+}

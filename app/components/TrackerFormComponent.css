@@ -1,36 +1,84 @@
+.addTrackerButton {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  width: 15vw;
+  padding: 1vh 1vw;
+  margin: 2vh 1vw;
+  background-color: #1695b5;
+  color: white;
+}
+
+.componentContainer,
 .formContainer {
   display: flex;
   flex-direction: column;
-  width: fit-content;
+  justify-content: center;
   align-items: center;
 }
 
-.formLabel {
-  display: inline-block;
-  width: 6vw;
+.inputGroup {
+  font-family: 'Segoe UI', sans-serif;
+  /* margin: 0% 3%; */
+  /* max-width: 190px; */
+  position: relative;
 }
 
-/* ------------------------- FILTERS ---------------------------- */
+.inputGroup input {
+  font-size: 100%;
+  padding: 0.8em;
+  outline: none;
+  border: 2px solid rgb(200, 200, 200);
+  background-color: transparent;
+  border-radius: 20px;
+  width: 100%;
+}
 
-.filterContainer {
+.inputGroup label {
+  font-size: 100%;
+  position: absolute;
+  left: 0;
+  padding: 0.8em;
+  margin-left: 0.5em;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  color: rgb(100, 100, 100);
+}
+
+.inputGroup :is(input:focus, input:valid) ~ label {
+  transform: translateY(-50%) scale(0.9);
+  margin: 0em;
+  margin-left: 1.3em;
+  padding: 0.4em;
+  background-color: #ffffff;
+}
+
+.inputGroup :is(input:focus, input:valid) {
+  border-color: rgb(226, 211, 138);
+}
+
+.displayRow {
   display: flex;
-  flex-direction: column;
-
-  margin: 2vh;
-}
-.filterContainer h1 {
-  font-size: large;
-  font-weight: bold;
 }
 
-.rucherFilterGroup {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  margin: 1vh;
-  font-size: medium;
+.inputGroupLeft {
+  width: 70%;
 }
-.rucherFilterGroup input {
-  margin-right: 1vh;
+
+.inputGroupRight {
+  width: 30%;
+}
+
+.inputGroupLarge {
+  width: 100%;
+}
+
+.closeAddTrackerModal {
+  position: absolute;
+  height: 2vw;
+  top: 0;
+  right: 0;
+  margin-right: 3vw;
+  cursor: pointer;
 }
