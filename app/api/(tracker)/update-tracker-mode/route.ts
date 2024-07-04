@@ -63,6 +63,8 @@ export async function GET(request: Request) {
               },
               data: {
                 mode: mode,
+                pause_duration: null,
+                pause_end_time: null,
               },
             });
             return NextResponse.json(`Le tracker ${id} est en mode ${mode}`, {
