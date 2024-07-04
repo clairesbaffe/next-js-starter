@@ -126,7 +126,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         overlayClassName={styles.modalOverlay}
       >
         <div className="componentContainer space-y-8">
-          <h1>Mettre en pause pour combien de temps ?</h1>
+          <h1>Temps de pause</h1>
           <FontAwesomeIcon
             className="closeAddTrackerModal"
             onClick={closeModalToggleTrackerPause}
@@ -199,7 +199,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         <p>{renderModeDescription(trackerMode)}</p>
         {tracker.mode === 'PAUSE' && (
           <p>
-            Fin de la pause :{' '}
+            Fin de la pause :
             {new Date(tracker.pause_end_time).toLocaleTimeString('fr-FR', {
               year: 'numeric',
               month: 'numeric',

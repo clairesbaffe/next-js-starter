@@ -63,15 +63,34 @@ function MapComponent({ initialTrackers }: TrackersListProps) {
           }
 
           const coordinates = [last_location.longitude, last_location.latitude];
-          new mapboxgl.Marker(el)
-            .setLngLat(coordinates)
-            .setPopup(
-              new mapboxgl.Popup({ offset: 25 }).setHTML(`
-                    <h1>${tracker.nom}</h1>
-                    <p>${tracker.mode}</p>
-                    `),
-            )
-            .addTo(map);
+          if (tracker.mode === 'PAUSE') {
+            new mapboxgl.Marker(el)
+              .setLngLat(coordinates)
+              .setPopup(
+                new mapboxgl.Popup({ offset: 25 }).setHTML(`
+                      <h1>${tracker.nom}</h1>
+                      <p>${tracker.mode}</p>
+                      <p>Fin de la pause : ${new Date(
+                        tracker.pause_end_time,
+                      ).toLocaleTimeString('fr-FR', {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                      })}</p>
+                      `),
+              )
+              .addTo(map);
+          } else {
+            new mapboxgl.Marker(el)
+              .setLngLat(coordinates)
+              .setPopup(
+                new mapboxgl.Popup({ offset: 25 }).setHTML(`
+                      <h1>${tracker.nom}</h1>
+                      <p>${tracker.mode}</p>
+                      `),
+              )
+              .addTo(map);
+          }
         }
       }
     });
