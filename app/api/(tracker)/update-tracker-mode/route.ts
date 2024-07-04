@@ -15,6 +15,7 @@ function addSeconds(date: Date, seconds: number) {
   return date;
 }
 
+export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
