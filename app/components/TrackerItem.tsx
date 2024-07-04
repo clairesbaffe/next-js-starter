@@ -199,7 +199,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         <p>{renderModeDescription(trackerMode)}</p>
         {tracker.mode === 'PAUSE' && (
           <p>
-            Fin de la pause :
+            Fin de la pause :{' '}
             {new Date(tracker.pause_end_time).toLocaleTimeString('fr-FR', {
               year: 'numeric',
               month: 'numeric',
