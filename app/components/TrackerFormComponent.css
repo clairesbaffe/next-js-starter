@@ -21,7 +21,7 @@
 .inputGroup {
   font-family: 'Segoe UI', sans-serif;
   /* margin: 0% 3%; */
-  /* max-width: 190px; */
+  /* min-width: 25vw; */
   position: relative;
 }
 
@@ -60,18 +60,19 @@
 
 .displayRow {
   display: flex;
+  align-items: center;
 }
 
 .inputGroupLeft {
-  width: 70%;
+  width: 30vw;
 }
 
 .inputGroupRight {
-  width: 30%;
+  width: 15vw;
 }
 
 .inputGroupLarge {
-  width: 100%;
+  width: 45vw;
 }
 
 .closeAddTrackerModal {
@@ -81,4 +82,27 @@
   right: 0;
   margin-right: 3vw;
   cursor: pointer;
+}
+
+/* TRACKER ITEM FORM */
+
+.input-style {
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #555;
+  outline: none;
+  margin: 0.5vw;
+}
+
+.input-style:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.displayColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

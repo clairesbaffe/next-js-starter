@@ -8,6 +8,7 @@ import {
   faPowerOff,
   faPlay,
   faTrash,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Popup from 'reactjs-popup';
@@ -34,7 +35,23 @@ async function handleModeChange(
   current_mode: string,
   tracker_id: number,
   change_to_specified_mode: boolean,
+  event?: any,
 ) {
+  let pause_duration;
+  let hours;
+  let minutes;
+  let seconds;
+
+  if (event) {
+    event.preventDefault();
+    const form = event.target;
+    hours = form.pause_duration_h.value;
+    minutes = form.pause_duration_m.value;
+    seconds = form.pause_duration_s.value;
+    pause_duration =
+      parseInt(seconds) + parseInt(minutes) * 60 + parseInt(hours) * 3600;
+  }
+
   let new_mode;
   if (change_to_specified_mode) {
     new_mode = current_mode;
@@ -55,9 +72,15 @@ async function handleModeChange(
     }
   }
 
-  await fetch(
-    `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker_id}&mode=${new_mode}`,
-  );
+  if (new_mode === 'PAUSE' && pause_duration) {
+    await fetch(
+      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker_id}&mode=${new_mode}&pause_duration=${pause_duration}`,
+    );
+  } else {
+    await fetch(
+      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker_id}&mode=${new_mode}`,
+    );
+  }
 
   window.location.reload();
 
@@ -76,6 +99,8 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
   const [trackerMode, setTrackerMode] = useState(tracker.mode);
   const [modalDeleteTrackerIsOpen, setModalDeleteTrackerIsOpen] =
     useState(false);
+  const [modalToggleTrackerPauseIsOpen, setModalToggleTrackerPauseIsOpen] =
+    useState(false);
 
   const openModalDeleteTracker = () => {
     setModalDeleteTrackerIsOpen(true);
@@ -84,11 +109,104 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
     setModalDeleteTrackerIsOpen(false);
   };
 
+  const openModalToggleTrackerPause = () => {
+    setModalToggleTrackerPauseIsOpen(true);
+  };
+  const closeModalToggleTrackerPause = () => {
+    setModalToggleTrackerPauseIsOpen(false);
+  };
+
   return (
     <div className="tracker-container">
+      <Modal
+        isOpen={modalToggleTrackerPauseIsOpen}
+        onRequestClose={closeModalToggleTrackerPause}
+        ariaHideApp={false}
+        className={styles.modalContainer}
+        overlayClassName={styles.modalOverlay}
+      >
+        <div className="componentContainer space-y-8">
+          <h1>Mettre en pause pour combien de temps ?</h1>
+          <FontAwesomeIcon
+            className="closeAddTrackerModal"
+            onClick={closeModalToggleTrackerPause}
+            icon={faXmark}
+          />
+          <form
+            onSubmit={(event) =>
+              handleModeChange(tracker.mode, tracker.id, false, event)
+            }
+            className="formContainer space-y-6"
+          >
+            <div className="displayRow">
+              <div className="displayColumn">
+                <label htmlFor="pause_duration_h">heures</label>
+                <input
+                  className="input-style"
+                  type="number"
+                  name="pause_duration_h"
+                  id="pause_duration_h"
+                  required
+                  min={0}
+                  max={59}
+                  defaultValue={0}
+                />
+              </div>
+
+              <span> : </span>
+              <div className="displayColumn">
+                <label htmlFor="pause_duration_m">minutes</label>
+                <input
+                  className="input-style"
+                  type="number"
+                  name="pause_duration_m"
+                  id="pause_duration_m"
+                  required
+                  min={0}
+                  max={59}
+                  defaultValue={0}
+                />
+              </div>
+
+              <span> : </span>
+
+              <div className="displayColumn">
+                <label htmlFor="pause_duration_s">secondes</label>
+                <input
+                  className="input-style"
+                  type="number"
+                  name="pause_duration_s"
+                  id="pause_duration_s"
+                  required
+                  min={0}
+                  max={59}
+                  defaultValue={0}
+                />
+              </div>
+            </div>
+
+            <input
+              type="submit"
+              value="Enregistrer"
+              className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100"
+            />
+          </form>
+        </div>
+      </Modal>
+
       <div className="left-side">
         <h1>{tracker.nom}</h1>
         <p>{renderModeDescription(trackerMode)}</p>
+        {tracker.mode === 'PAUSE' && (
+          <p>
+            Fin de la pause :{' '}
+            {new Date(tracker.pause_end_time).toLocaleTimeString('fr-FR', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+            })}
+          </p>
+        )}
         <p>Ruche : {tracker.ruche.nom}</p>
         <p>ID : {tracker.id}</p>
       </div>
@@ -122,9 +240,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
               </button>
               <button
                 className="tracker-menu-button"
-                onClick={() =>
-                  setTrackerMode(handleModeChange('PAUSE', tracker.id, true))
-                }
+                onClick={openModalToggleTrackerPause}
               >
                 <FontAwesomeIcon
                   icon={faPause}
@@ -196,11 +312,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         )}
 
         {trackerMode === 'FONCTIONNEL' && (
-          <div
-            onClick={() =>
-              setTrackerMode(handleModeChange(trackerMode, tracker.id, false))
-            }
-          >
+          <div onClick={openModalToggleTrackerPause}>
             <FontAwesomeIcon
               icon={faPlay}
               className="tracker-mode-icon"
