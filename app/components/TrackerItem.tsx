@@ -56,7 +56,7 @@ async function handleModeChange(
   }
 
   await fetch(
-    `https://next-js-starter-lyart.vercel.app/api/update-tracker?id=${tracker_id}&mode=${new_mode}`,
+    `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker_id}&mode=${new_mode}`,
   );
 
   window.location.reload();

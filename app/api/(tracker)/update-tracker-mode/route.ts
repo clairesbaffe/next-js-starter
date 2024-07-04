@@ -13,29 +13,15 @@ function isValidMode(mode: string): mode is Mode {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
-  const nom = searchParams.get('nom');
   const mode = searchParams.get('mode');
 
   try {
     if (!id) throw new Error('Id du tracker requis');
     else {
-      if (!nom && !mode) {
-        throw new Error('Nom ou mode requis requis');
+      if (!mode) {
+        throw new Error('Mode requis requis');
       } else {
-        if (nom) {
-          // MODIFIER LE NOM
-          await prisma.tracker.update({
-            where: {
-              id: parseInt(id),
-            },
-            data: {
-              nom: nom,
-            },
-          });
-          return NextResponse.json(`Le tracker ${id} est renommé ${nom}`, {
-            status: 200,
-          });
-        } else if (mode && !isValidMode(mode)) {
+        if (mode && !isValidMode(mode)) {
           throw new Error("Le mode n'est pas valide");
         } else if (mode && isValidMode(mode)) {
           // MODIFIER LE MODE
