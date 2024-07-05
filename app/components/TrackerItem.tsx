@@ -31,9 +31,35 @@ function renderModeDescription(mode: string): string {
   }
 }
 
+const sendMessage = async (ind: number, time: number, topic: string) => {
+  const message = { ind: ind, time: time };
+
+  try {
+    const response = await fetch('/api/publish', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ topic: topic, message: message }),
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(
+        data.error || 'An error occurred while publishing the message',
+      );
+    }
+
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
 async function handleModeChange(
+  tracker: any,
   current_mode: string,
-  tracker_id: number,
   change_to_specified_mode: boolean,
   event?: any,
 ) {
@@ -75,6 +101,12 @@ async function handleModeChange(
   if (new_mode === 'PAUSE' && pause_duration) {
     await fetch(
       `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker_id}&mode=${new_mode}&pause_duration=${pause_duration}`,
+    );
+    const pause_duration_h = pause_duration / 3600;
+    await sendMessage(
+      tracker.ruche.rucher.id,
+      pause_duration_h,
+      't/p/idTracker',
     );
   } else {
     await fetch(
@@ -134,7 +166,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
           />
           <form
             onSubmit={(event) =>
-              handleModeChange(tracker.mode, tracker.id, false, event)
+              handleModeChange(tracker, tracker.mode, false, event)
             }
             className="formContainer space-y-6"
           >
@@ -226,9 +258,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
               <button
                 className="tracker-menu-button"
                 onClick={() =>
-                  setTrackerMode(
-                    handleModeChange('FONCTIONNEL', tracker.id, true),
-                  )
+                  setTrackerMode(handleModeChange(tracker, 'FONCTIONNEL', true))
                 }
               >
                 <FontAwesomeIcon
@@ -252,7 +282,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
               <button
                 className="tracker-menu-button"
                 onClick={() =>
-                  setTrackerMode(handleModeChange('INACTIF', tracker.id, true))
+                  setTrackerMode(handleModeChange(tracker, 'INACTIF', true))
                 }
               >
                 <FontAwesomeIcon
@@ -300,7 +330,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         {trackerMode === 'INACTIF' && (
           <div
             onClick={() =>
-              setTrackerMode(handleModeChange(trackerMode, tracker.id, false))
+              setTrackerMode(handleModeChange(tracker, trackerMode, false))
             }
           >
             <FontAwesomeIcon
@@ -323,7 +353,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         {trackerMode === 'PAUSE' && (
           <div
             onClick={() =>
-              setTrackerMode(handleModeChange(trackerMode, tracker.id, false))
+              setTrackerMode(handleModeChange(tracker, trackerMode, false))
             }
           >
             <FontAwesomeIcon
@@ -336,7 +366,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         {trackerMode === 'TRACKING' && (
           <div
             onClick={() =>
-              setTrackerMode(handleModeChange(trackerMode, tracker.id, false))
+              setTrackerMode(handleModeChange(tracker, trackerMode, false))
             }
           >
             <FontAwesomeIcon
