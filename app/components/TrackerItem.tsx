@@ -100,7 +100,7 @@ async function handleModeChange(
 
   if (new_mode === 'PAUSE' && pause_duration) {
     await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker_id}&mode=${new_mode}&pause_duration=${pause_duration}`,
+      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker.id}&mode=${new_mode}&pause_duration=${pause_duration}`,
     );
     const pause_duration_h = pause_duration / 3600;
     await sendMessage(
@@ -110,7 +110,7 @@ async function handleModeChange(
     );
   } else {
     await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker_id}&mode=${new_mode}`,
+      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker.id}&mode=${new_mode}`,
     );
   }
 
