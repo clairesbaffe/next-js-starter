@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       else response = 'pause';
     } else response = 'pas pause';
 
-    return NextResponse.json(`Le tracker ${id}`, {
+    return NextResponse.json(response, {
       status: 200,
     });
   } catch (error) {
