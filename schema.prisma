@@ -40,6 +40,7 @@ model Tracker {
   date_modification DateTime @updatedAt
   pause_duration    Int?     // Durée de la pause en secondes (nullable)
   pause_end_time    DateTime? // Date et heure de fin de la pause (nullable)
+  deplacement       Boolean ? // Indique si la pause est un déplacement (nullable)
   historiques       Historique_Tracker[]
 }
 
