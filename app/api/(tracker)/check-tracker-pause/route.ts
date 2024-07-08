@@ -18,9 +18,9 @@ export async function GET(request: Request) {
 
     let response = '';
     if (tracker.mode === 'PAUSE') {
-      if (tracker.deplacement) response = 'deplacement';
-      else response = 'pause';
-    } else response = 'non';
+      if (tracker.deplacement) response = '2';
+      else response = '1';
+    } else response = '0';
 
     return NextResponse.json(response, {
       status: 200,

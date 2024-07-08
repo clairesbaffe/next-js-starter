@@ -1,6 +1,6 @@
 import mqtt from 'mqtt';
 
-const brokerUrl = 'mqtt://13.53.147.163:1883';
+const brokerUrl = 'mqtt://13.60.47.157:1883';
 const username = 'username';
 const password = '1234';
 
