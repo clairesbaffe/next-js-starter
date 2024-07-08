@@ -17,13 +17,19 @@ export async function GET(request: Request) {
     });
     if (!tracker) throw new Error('Tracker introuvable');
 
-    let response = '';
-    if (tracker.mode === 'PAUSE') {
-      console.log(tracker.deplacement);
+    let time;
+    if (tracker.pause_end_time) {
+      time = Math.trunc(
+        (new Date(tracker.pause_end_time).getTime() - new Date().getTime()) /
+          1000,
+      );
+    }
 
-      if (tracker.deplacement) response = '2';
-      else response = '1';
-    } else response = '0';
+    let response;
+    if (tracker.mode === 'PAUSE') {
+      if (tracker.deplacement) response = { ind: 2, time: time };
+      else response = { ind: 1, time: time };
+    } else response = { ind: 0 };
 
     return NextResponse.json(response, {
       status: 200,
