@@ -19,6 +19,8 @@ export async function GET(request: Request) {
 
     let response = '';
     if (tracker.mode === 'PAUSE') {
+      console.log(tracker.deplacement);
+
       if (tracker.deplacement) response = '2';
       else response = '1';
     } else response = '0';

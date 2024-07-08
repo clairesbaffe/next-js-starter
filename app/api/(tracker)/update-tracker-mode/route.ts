@@ -15,6 +15,10 @@ function addSeconds(date: Date, seconds: number) {
   return date;
 }
 
+function stringToBoolean(string: string) {
+  return string === 'true';
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
@@ -45,7 +49,7 @@ export async function GET(request: Request) {
             mode: mode,
             pause_duration: parseInt(pause_duration),
             pause_end_time: pause_end_time,
-            deplacement: Boolean(deplacement),
+            deplacement: stringToBoolean(deplacement),
           },
         });
         return NextResponse.json(
