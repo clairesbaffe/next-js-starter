@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     if (tracker.mode === 'PAUSE') {
       if (tracker.deplacement) response = 'deplacement';
       else response = 'pause';
-    } else response = 'pas pause';
+    } else response = 'non';
 
     return NextResponse.json(response, {
       status: 200,
