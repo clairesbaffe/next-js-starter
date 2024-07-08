@@ -20,6 +20,7 @@ export async function GET(request: Request) {
   const id = searchParams.get('id');
   const mode = searchParams.get('mode');
   const pause_duration = searchParams.get('pause_duration');
+  const deplacement = searchParams.get('deplacement');
 
   try {
     if (!id) throw new Error('Id du tracker requis');
@@ -30,6 +31,7 @@ export async function GET(request: Request) {
       // MODIFIER LE MODE
       if (mode === 'PAUSE') {
         if (!pause_duration) throw new Error('Durée de la pause requise');
+        if (!deplacement) throw new Error('Donnée de déplacement requise');
 
         let date = new Date();
 
@@ -43,6 +45,7 @@ export async function GET(request: Request) {
             mode: mode,
             pause_duration: parseInt(pause_duration),
             pause_end_time: pause_end_time,
+            deplacement: Boolean(deplacement),
           },
         });
         return NextResponse.json(
@@ -60,6 +63,7 @@ export async function GET(request: Request) {
             mode: mode,
             pause_duration: null,
             pause_end_time: null,
+            deplacement: null,
           },
         });
         return NextResponse.json(`Le tracker ${id} est en mode ${mode}`, {

@@ -28,6 +28,7 @@ export async function GET(request: Request) {
         },
         data: {
           mode: 'FONCTIONNEL',
+          deplacement: null,
         },
       });
     }

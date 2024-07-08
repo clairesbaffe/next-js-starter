@@ -33,6 +33,7 @@ export async function GET(request: Request) {
             mode: 'FONCTIONNEL',
             pause_duration: null,
             pause_end_time: null,
+            deplacement: null,
           },
         });
       }

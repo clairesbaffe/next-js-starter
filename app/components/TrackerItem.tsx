@@ -67,6 +67,7 @@ async function handleModeChange(
   let hours;
   let minutes;
   let seconds;
+  let deplacement;
 
   if (event) {
     event.preventDefault();
@@ -76,6 +77,7 @@ async function handleModeChange(
     seconds = form.pause_duration_s.value;
     pause_duration =
       parseInt(seconds) + parseInt(minutes) * 60 + parseInt(hours) * 3600;
+    deplacement = form.deplacement.value;
   }
 
   let new_mode;
@@ -98,9 +100,9 @@ async function handleModeChange(
     }
   }
 
-  if (new_mode === 'PAUSE' && pause_duration) {
+  if (new_mode === 'PAUSE' && pause_duration && deplacement) {
     await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker.id}&mode=${new_mode}&pause_duration=${pause_duration}`,
+      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker.id}&mode=${new_mode}&pause_duration=${pause_duration}&deplacement=${deplacement}`,
     );
     const pause_duration_h = pause_duration / 3600;
     await sendMessage(
@@ -170,6 +172,15 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
             }
             className="formContainer space-y-6"
           >
+            <div>
+              <input
+                type="checkbox"
+                name="deplacement"
+                id="deplacement"
+                defaultChecked={false}
+              />
+              <label htmlFor="deplacement">Déplacement ?</label>
+            </div>
             <div className="displayRow">
               <div className="displayColumn">
                 <label htmlFor="pause_duration_h">heures</label>
@@ -212,7 +223,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
                   required
                   min={0}
                   max={59}
-                  defaultValue={0}
+                  defaultValue={10}
                 />
               </div>
             </div>
