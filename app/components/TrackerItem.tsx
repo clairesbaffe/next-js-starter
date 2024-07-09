@@ -77,7 +77,7 @@ async function handleModeChange(
     seconds = form.pause_duration_s.value;
     pause_duration =
       parseInt(seconds) + parseInt(minutes) * 60 + parseInt(hours) * 3600;
-    deplacement = form.deplacement.value;
+    deplacement = form.deplacement.checked;
   }
 
   let new_mode;
@@ -100,16 +100,19 @@ async function handleModeChange(
     }
   }
 
-  if (new_mode === 'PAUSE' && pause_duration && deplacement) {
-    await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker.id}&mode=${new_mode}&pause_duration=${pause_duration}&deplacement=${deplacement}`,
-    );
-    const pause_duration_h = pause_duration / 3600;
-    await sendMessage(
-      tracker.ruche.rucher.id,
-      pause_duration_h,
-      't/p/idTracker',
-    );
+  if (new_mode === 'PAUSE' && pause_duration) {
+    const submitData = {
+      trackerId: tracker.id,
+      duration: pause_duration,
+      deplacement: deplacement,
+    };
+    await fetch('https://next-js-starter-lyart.vercel.app/api/pause-tracker', {
+      method: 'POST',
+      body: JSON.stringify(submitData),
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
   } else {
     await fetch(
       `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker.id}&mode=${new_mode}`,
