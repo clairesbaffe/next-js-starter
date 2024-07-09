@@ -28,9 +28,7 @@ export async function POST(req: Request, res: any) {
     // Start a timer for this tracker
     startTrackerTimer(trackerId, duration);
 
-    return NextResponse.json(updatedTracker, {
-      status: 200,
-    });
+    return NextResponse.json(updatedTracker, { status: 200 });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Internal Serveur Error';

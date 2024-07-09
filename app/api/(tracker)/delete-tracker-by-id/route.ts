@@ -9,15 +9,13 @@ export async function DELETE(req: Request, res: any) {
 
     if (!id) throw new Error('Id de tracker requis');
 
-    await prisma.tracker.delete({
+    const tracker = await prisma.tracker.delete({
       where: {
         id: parseInt(id),
       },
     });
 
-    return NextResponse.json(`Le tracker ${id} a été effacé`, {
-      status: 200,
-    });
+    return NextResponse.json(tracker, { status: 200 });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Internal Serveur Error';
