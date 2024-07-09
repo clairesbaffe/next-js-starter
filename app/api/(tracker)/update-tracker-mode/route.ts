@@ -10,7 +10,7 @@ function isValidMode(mode: string): mode is Mode {
   return validModes.includes(mode as Mode);
 }
 
-export async function POST(req: Request, res: any) {
+export async function PATCH(req: Request, res: any) {
   try {
     const { id, mode } = await req.json();
 

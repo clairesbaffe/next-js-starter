@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function POST(req: Request, res: any) {
+export async function PATCH(req: Request, res: any) {
   try {
     const { nom, ruche_id } = await req.json();
 

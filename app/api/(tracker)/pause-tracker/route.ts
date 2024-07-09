@@ -8,7 +8,7 @@ function addSeconds(date: Date, seconds: number) {
   return date;
 }
 
-export async function POST(req: Request, res: any) {
+export async function PATCH(req: Request, res: any) {
   try {
     const { trackerId, duration, deplacement } = await req.json();
 
