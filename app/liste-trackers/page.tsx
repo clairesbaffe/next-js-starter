@@ -8,7 +8,7 @@ async function fetchTrackers() {
     `https://next-js-starter-lyart.vercel.app/api/get-trackers-by-rucher-id?rucher_id=1,2`,
   );
   const data = await response.json();
-  return data.trackers;
+  return data;
 }
 
 export default async function Page() {

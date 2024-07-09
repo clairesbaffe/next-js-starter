@@ -4,7 +4,7 @@ import MapComponent from '../components/MapComponent';
 
 export default async function Page() {
   const locations = await fetchLocationsByRucher(1);
-  let geojson = locations.trackers;
+  let geojson = locations;
 
   async function fetchLocationsByRucher(rucher_id: number) {
     const response = await fetch(

@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json({ ruches }, { status: 200 });
+    return NextResponse.json(ruches, { status: 200 });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Internal Serveur Error';

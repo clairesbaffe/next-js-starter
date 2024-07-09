@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   try {
     const ruchers = await prisma.rucher.findMany();
 
-    return NextResponse.json({ ruchers }, { status: 200 });
+    return NextResponse.json(ruchers, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   } finally {

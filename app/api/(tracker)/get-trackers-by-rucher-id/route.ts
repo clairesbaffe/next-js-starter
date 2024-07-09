@@ -32,7 +32,7 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json({ trackers }, { status: 200 });
+    return NextResponse.json(trackers, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   } finally {

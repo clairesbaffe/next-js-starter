@@ -6,9 +6,9 @@ import { revalidateTag } from 'next/cache';
 export default async function Page() {
   revalidateTag('Tracker');
   const locations = await fetchLocationsByRucher([1, 2]);
-  let trackers = locations.trackers;
+  let trackers = locations;
   const balances = await fetchRuchesByRucher([1, 2]);
-  let ruches = balances.ruches;
+  let ruches = balances;
 
   async function fetchLocationsByRucher(rucher_id: number[]) {
     const response = await fetch(
