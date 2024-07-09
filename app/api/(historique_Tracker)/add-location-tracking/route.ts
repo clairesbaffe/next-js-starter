@@ -32,7 +32,7 @@ export async function GET(request: Request) {
       });
     }
 
-    await prisma.historique_Tracker.create({
+    const location = await prisma.historique_Tracker.create({
       data: {
         tracker_id: parseInt(trackerId),
         longitude: parseFloat(longitude),
@@ -40,12 +40,11 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json(
-      `Localisation {${parseFloat(longitude)}, ${parseFloat(latitude)}} créée pour le tracker ${trackerId}`,
-      { status: 200 },
-    );
+    return NextResponse.json(location, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    const errorMessage =
+      error instanceof Error ? error.message : 'Internal Serveur Error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }
