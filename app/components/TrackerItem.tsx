@@ -114,8 +114,19 @@ async function handleModeChange(
       },
     });
   } else {
+    const submitData = {
+      id: tracker.id,
+      mode: new_mode,
+    };
     await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/update-tracker-mode?id=${tracker.id}&mode=${new_mode}`,
+      'https://next-js-starter-lyart.vercel.app/api/update-tracker-mode',
+      {
+        method: 'POST',
+        body: JSON.stringify(submitData),
+        headers: {
+          'content-type': 'application/json',
+        },
+      },
     );
   }
 
@@ -125,8 +136,18 @@ async function handleModeChange(
 }
 
 async function handleTrackerDelete(tracker_id: number) {
+  const submitData = {
+    id: tracker_id,
+  };
   await fetch(
-    `https://next-js-starter-lyart.vercel.app/api/delete-tracker-by-id?id=${tracker_id}&reset=true`,
+    'https://next-js-starter-lyart.vercel.app/api/delete-tracker-by-id',
+    {
+      method: 'DELETE',
+      body: JSON.stringify(submitData),
+      headers: {
+        'content-type': 'application/json',
+      },
+    },
   );
 
   window.location.reload();

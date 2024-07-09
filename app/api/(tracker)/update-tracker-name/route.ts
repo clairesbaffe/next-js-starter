@@ -3,29 +3,28 @@ import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const nom = searchParams.get('nom');
-  const id = searchParams.get('id');
-
+export async function POST(req: Request, res: any) {
   try {
-    if (!nom || !id) throw new Error('Id du tracker et nom requis');
-    else {
-      await prisma.tracker.update({
-        where: {
-          id: parseInt(id),
-        },
-        data: {
-          nom: nom,
-        },
-      });
+    const { id, nom } = await req.json();
 
-      return NextResponse.json(`Le tracker s'appelle désormais ${nom}`, {
-        status: 200,
-      });
-    }
+    if (!nom || !id) throw new Error('Id du tracker et nom requis');
+
+    await prisma.tracker.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        nom: nom,
+      },
+    });
+
+    return NextResponse.json(`Le tracker s'appelle désormais ${nom}`, {
+      status: 200,
+    });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    const errorMessage =
+      error instanceof Error ? error.message : 'Internal Serveur Error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

@@ -10,70 +10,33 @@ function isValidMode(mode: string): mode is Mode {
   return validModes.includes(mode as Mode);
 }
 
-function addSeconds(date: Date, seconds: number) {
-  date.setSeconds(date.getSeconds() + seconds);
-  return date;
-}
-
-function stringToBoolean(string: string) {
-  return string === 'true';
-}
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-  const mode = searchParams.get('mode');
-  const pause_duration = searchParams.get('pause_duration');
-  const deplacement = searchParams.get('deplacement');
-
+export async function POST(req: Request, res: any) {
   try {
+    const { id, mode } = await req.json();
+
     if (!id) throw new Error('Id du tracker requis');
     if (!mode) throw new Error('Mode requis');
     if (mode && !isValidMode(mode)) throw new Error("Le mode n'est pas valide");
 
     if (mode && isValidMode(mode)) {
       // MODIFIER LE MODE
-      if (mode === 'PAUSE') {
-        if (!pause_duration) throw new Error('Durée de la pause requise');
-        if (!deplacement) throw new Error('Donnée de déplacement requise');
+      if (mode === 'PAUSE')
+        throw new Error('Utiliser la route pause-tracker poru le mode PAUSE');
 
-        let date = new Date();
-
-        const pause_end_time = addSeconds(date, parseInt(pause_duration));
-
-        await prisma.tracker.update({
-          where: {
-            id: parseInt(id),
-          },
-          data: {
-            mode: mode,
-            pause_duration: parseInt(pause_duration),
-            pause_end_time: pause_end_time,
-            deplacement: stringToBoolean(deplacement),
-          },
-        });
-        return NextResponse.json(
-          `Le tracker ${id} est en mode ${mode} pendant ${pause_duration} secondes`,
-          {
-            status: 200,
-          },
-        );
-      } else {
-        await prisma.tracker.update({
-          where: {
-            id: parseInt(id),
-          },
-          data: {
-            mode: mode,
-            pause_duration: null,
-            pause_end_time: null,
-            deplacement: null,
-          },
-        });
-        return NextResponse.json(`Le tracker ${id} est en mode ${mode}`, {
-          status: 200,
-        });
-      }
+      await prisma.tracker.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: {
+          mode: mode,
+          pause_duration: null,
+          pause_end_time: null,
+          deplacement: null,
+        },
+      });
+      return NextResponse.json(`Le tracker ${id} est en mode ${mode}`, {
+        status: 200,
+      });
     }
   } catch (error) {
     const errorMessage =

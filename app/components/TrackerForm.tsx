@@ -14,9 +14,17 @@ async function addTracker(
   ruche_id: string,
   selectedBalance: number,
 ) {
-  await fetch(
-    `https://next-js-starter-lyart.vercel.app/api/add-tracker?nom=${nom}&ruche_id=${selectedBalance}`,
-  );
+  const submitData = {
+    nom: nom,
+    ruche_id: selectedBalance,
+  };
+  await fetch('https://next-js-starter-lyart.vercel.app/api/add-tracker', {
+    method: 'POST',
+    body: JSON.stringify(submitData),
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
 }
 
 const TrackerForm = ({ balances }: RuchesListProps) => {

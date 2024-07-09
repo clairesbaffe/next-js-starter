@@ -8,10 +8,6 @@ function addSeconds(date: Date, seconds: number) {
   return date;
 }
 
-function stringToBoolean(string: string) {
-  return string === 'true';
-}
-
 export async function POST(req: Request, res: any) {
   try {
     const { trackerId, duration, deplacement } = await req.json();
