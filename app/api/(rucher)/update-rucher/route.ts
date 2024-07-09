@@ -3,29 +3,28 @@ import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const nom = searchParams.get('nom');
-  const rucher_id = searchParams.get('rucher_id');
+export async function POST(req: Request, res: any) {
+  const { id, nom } = await req.json();
 
   try {
-    if (!nom || !rucher_id) throw new Error('Id du rucher et nom requis');
-    else {
-      await prisma.rucher.update({
-        where: {
-          id: parseInt(rucher_id),
-        },
-        data: {
-          nom: nom,
-        },
-      });
+    if (!nom || !id) throw new Error('Id du rucher et nom requis');
 
-      return NextResponse.json(`LE rucher s'appelle désormais ${nom}`, {
-        status: 200,
-      });
-    }
+    const rucher = await prisma.rucher.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        nom: nom,
+      },
+    });
+
+    return NextResponse.json(rucher, {
+      status: 200,
+    });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    const errorMessage =
+      error instanceof Error ? error.message : 'Internal Serveur Error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

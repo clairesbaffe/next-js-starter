@@ -6,14 +6,17 @@ const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const rucher_id = searchParams.get('rucher_id');
+  const id = searchParams.get('id');
 
   try {
-    if (!rucher_id) throw new Error('Id du rucher requis');
+    if (!id) throw new Error('Id du rucher requis');
     else {
       const rucher = await prisma.rucher.findUnique({
         where: {
-          id: parseInt(rucher_id),
+          id: parseInt(id),
+        },
+        include: {
+          ruches: true,
         },
       });
 

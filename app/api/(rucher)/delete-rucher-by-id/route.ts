@@ -1,17 +1,22 @@
 import { NextResponse } from 'next/server';
-
 import { PrismaClient } from '@prisma/client';
+import { deleteRuches } from '../../../utils/deleteItems';
+
 const prisma = new PrismaClient();
 
-export async function POST(req: Request, res: any) {
+export async function DELETE(req: Request, res: any) {
   try {
-    const { nom } = await req.json();
+    const { reset, id } = await req.json();
 
-    if (!nom) throw new Error('Nom requis');
+    if (!reset || reset != 'true')
+      throw new Error('Confirmation de réinitialisation nécessaire');
+    if (!id) throw new Error('Id de rucher requis');
 
-    const rucher = await prisma.rucher.create({
-      data: {
-        nom: nom,
+    await deleteRuches(id);
+
+    const rucher = await prisma.rucher.delete({
+      where: {
+        id: id,
       },
     });
 
