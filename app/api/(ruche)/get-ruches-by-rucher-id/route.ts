@@ -10,20 +10,21 @@ export async function GET(request: Request) {
 
   try {
     if (!rucher_id) throw new Error('Id du rucher requis');
-    else {
-      const rucherIds = rucher_id.split(',').map((id) => parseInt(id));
-      const ruches = await prisma.ruche.findMany({
-        where: {
-          rucher_id: {
-            in: rucherIds,
-          },
-        },
-      });
 
-      return NextResponse.json({ ruches }, { status: 200 });
-    }
+    const rucherIds = rucher_id.split(',').map((id) => parseInt(id));
+    const ruches = await prisma.ruche.findMany({
+      where: {
+        rucher_id: {
+          in: rucherIds,
+        },
+      },
+    });
+
+    return NextResponse.json({ ruches }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    const errorMessage =
+      error instanceof Error ? error.message : 'Internal Serveur Error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

@@ -1,36 +1,24 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { deleteRuches } from '../../../utils/deleteItems';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const reset = searchParams.get('reset');
-  const rucher_id = searchParams.get('rucher_id');
-
+export async function DELETE(req: Request, res: any) {
   try {
-    if (!reset || reset != 'true') {
-      throw new Error('Confirmation de réinitialisation nécessaire');
-    } else {
-      if (!rucher_id) {
-        throw new Error('Id de rucher requis');
-      } else {
-        await prisma.ruche.deleteMany({
-          where: {
-            rucher_id: parseInt(rucher_id),
-          },
-        });
+    const { reset, rucher_id } = await req.json();
 
-        return NextResponse.json(
-          `Les ruches du rucher ${rucher_id} ont été effacées`,
-          {
-            status: 200,
-          },
-        );
-      }
-    }
+    if (!reset || reset != 'true')
+      throw new Error('Confirmation de réinitialisation nécessaire');
+    if (!rucher_id) throw new Error('Id de rucher requis');
+
+    const message = await deleteRuches(parseInt(rucher_id));
+
+    return NextResponse.json({ message }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    const errorMessage =
+      error instanceof Error ? error.message : 'Internal Serveur Error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }
