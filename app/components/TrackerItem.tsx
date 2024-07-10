@@ -107,7 +107,7 @@ async function handleModeChange(
       deplacement: deplacement,
     };
     await fetch('https://next-js-starter-lyart.vercel.app/api/pause-tracker', {
-      method: 'POST',
+      method: 'PATCH',
       body: JSON.stringify(submitData),
       headers: {
         'content-type': 'application/json',
@@ -121,7 +121,7 @@ async function handleModeChange(
     await fetch(
       'https://next-js-starter-lyart.vercel.app/api/update-tracker-mode',
       {
-        method: 'POST',
+        method: 'PATCH',
         body: JSON.stringify(submitData),
         headers: {
           'content-type': 'application/json',
@@ -139,16 +139,13 @@ async function handleTrackerDelete(tracker_id: number) {
   const submitData = {
     id: tracker_id,
   };
-  await fetch(
-    'https://next-js-starter-lyart.vercel.app/api/delete-tracker-by-id',
-    {
-      method: 'DELETE',
-      body: JSON.stringify(submitData),
-      headers: {
-        'content-type': 'application/json',
-      },
+  await fetch('http://localhost:3000/api/delete-tracker-by-id', {
+    method: 'DELETE',
+    body: JSON.stringify(submitData),
+    headers: {
+      'content-type': 'application/json',
     },
-  );
+  });
 
   window.location.reload();
 }
