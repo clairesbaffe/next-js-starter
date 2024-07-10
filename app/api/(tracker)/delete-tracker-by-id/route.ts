@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { deleteLocations } from '../../../utils/deleteItems';
 
 const prisma = new PrismaClient();
 
@@ -8,6 +9,8 @@ export async function DELETE(req: Request, res: any) {
     const { id } = await req.json();
 
     if (!id) throw new Error('Id de tracker requis');
+
+    await deleteLocations(id);
 
     const tracker = await prisma.tracker.delete({
       where: {
