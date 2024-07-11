@@ -14,7 +14,7 @@
     "prisma:migrate:resolve": "dotenv -e .env.development.local -- npx prisma migrate resolve --applied \"migration\"",
     "prisma:migrate:dev": "dotenv -e .env.development.local -- npx prisma migrate dev",
     "prisma:generate": "dotenv -e .env.development.local -- npx prisma generate",
-    "postbuild": "curl -X GET https://next-js-starter-lyart.vercel.app/api/restore-timers"
+    "postbuild": "echo 'Postbuild started' && curl -X GET https://next-js-starter-lyart.vercel.app/api/restore-timers && echo 'Postbuild completed'"
   },
   "git": {
     "pre-commit": "lint-staged"
