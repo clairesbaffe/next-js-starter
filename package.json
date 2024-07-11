@@ -13,7 +13,8 @@
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "prisma:migrate:resolve": "dotenv -e .env.development.local -- npx prisma migrate resolve --applied \"migration\"",
     "prisma:migrate:dev": "dotenv -e .env.development.local -- npx prisma migrate dev",
-    "prisma:generate": "dotenv -e .env.development.local -- npx prisma generate"
+    "prisma:generate": "dotenv -e .env.development.local -- npx prisma generate",
+    "postbuild": "curl -X GET https://next-js-starter-lyart.vercel.app/api/restore-timers"
   },
   "git": {
     "pre-commit": "lint-staged"
