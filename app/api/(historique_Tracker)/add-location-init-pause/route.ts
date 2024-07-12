@@ -14,12 +14,11 @@ export async function GET(request: Request) {
     if (!trackerId || !longitude || !latitude)
       throw new Error('Id de tracker, latitude et longitude requis');
 
-    const tracker = await prisma.tracker.findUnique({
+    const tracker = await prisma.tracker.findUniqueOrThrow({
       where: {
         id: parseInt(trackerId),
       },
     });
-    if (!tracker) throw new Error('Tracker introuvable');
 
     if (tracker.mode !== 'FONCTIONNEL') {
       await prisma.tracker.update({
