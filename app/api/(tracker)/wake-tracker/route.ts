@@ -21,6 +21,7 @@ export async function GET(request: Request) {
       where: { id: parseInt(id) },
       data: {
         mode: 'FONCTIONNEL',
+        date_modif_mode: new Date(),
       },
     });
 

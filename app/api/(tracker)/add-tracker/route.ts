@@ -13,6 +13,7 @@ export async function POST(req: Request, res: any) {
         nom: nom,
         ruche_id: parseInt(ruche_id),
         mode: 'INACTIF',
+        date_modif_mode: new Date(),
       },
     });
 

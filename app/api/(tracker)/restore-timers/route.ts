@@ -32,6 +32,7 @@ export async function GET(request: Request) {
                 pause_duration: null,
                 pause_end_time: null,
                 deplacement: null,
+                date_modif_mode: new Date(),
               },
             });
             console.log(`Tracker ID: ${tracker.id} updated to FONCTIONNEL`);

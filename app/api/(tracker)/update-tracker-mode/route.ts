@@ -23,7 +23,7 @@ export async function PATCH(req: Request, res: any) {
       if (mode === 'PAUSE')
         throw new Error('Utiliser la route pause-tracker poru le mode PAUSE');
 
-      await prisma.tracker.update({
+      const tracker = await prisma.tracker.update({
         where: {
           id: parseInt(id),
         },
@@ -32,11 +32,11 @@ export async function PATCH(req: Request, res: any) {
           pause_duration: null,
           pause_end_time: null,
           deplacement: null,
+          pause_tracking: null,
+          date_modif_mode: new Date(),
         },
       });
-      return NextResponse.json(`Le tracker ${id} est en mode ${mode}`, {
-        status: 200,
-      });
+      return NextResponse.json(tracker, { status: 200 });
     }
   } catch (error) {
     const errorMessage =
