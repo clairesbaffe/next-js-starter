@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { startTrackerTimer } from '../../../../lib/timer';
+import { publishMessage } from '../../../../mqttClient';
 
 const prisma = new PrismaClient();
 
@@ -27,6 +28,10 @@ export async function PATCH(req: Request, res: any) {
 
     // Start a timer for this tracker
     startTrackerTimer(trackerId, duration, 'TRACKING');
+
+    const topic = `t/t/${updatedTracker.id}`;
+    const messageString = `{"ind": 1, "time": ${duration}}`;
+    publishMessage(topic, messageString);
 
     return NextResponse.json(updatedTracker, { status: 200 });
   } catch (error) {
