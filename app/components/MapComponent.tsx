@@ -76,7 +76,7 @@ function addMarkers(geojson: any) {
         // FILTRER UNIQUEMENT LES LOCALISATIONS ENREGISTREES PENDANT LE MODE TRACKING
         const locations = tracker.historiques.filter((location: any) => {
           return (
-            new Date(location.date_ajout) > new Date(tracker.date_modification)
+            new Date(location.date_ajout) > new Date(tracker.date_modif_mode)
           );
         });
         if (locations.length === 0) locations.push(tracker.historiques.pop());
