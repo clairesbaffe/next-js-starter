@@ -197,7 +197,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
   const [pauseDuration, setPauseDuration] = useState('');
   const [pauseHours, setPauseHours] = useState(0);
   const [pauseMinutes, setPauseMinutes] = useState(0);
-  const [pauseSeconds, setPauseSeconds] = useState(44);
+  const [pauseSeconds, setPauseSeconds] = useState(0);
 
   const openModalDeleteTracker = () => {
     setModalDeleteTrackerIsOpen(true);
