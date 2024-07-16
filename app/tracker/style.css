@@ -102,6 +102,13 @@ label {
   border-radius: 100%;
 }
 
+.last-marker-pause {
+  background-color: rgb(255, 128, 0);
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 100%;
+}
+
 /* ---------------------------------------- LISTE DE TRACKERS ---------------------------------------- */
 
 .trackers-list {
