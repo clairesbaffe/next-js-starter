@@ -37,7 +37,7 @@ function renderModeDescription(
 
 async function handleModeChange(
   tracker: any,
-  current_mode: string,
+  wanted_mode: string,
   change_to_specified_mode: boolean,
   event?: any,
 ) {
@@ -60,9 +60,9 @@ async function handleModeChange(
 
   let new_mode;
   if (change_to_specified_mode) {
-    new_mode = current_mode;
+    new_mode = wanted_mode;
   } else {
-    switch (current_mode) {
+    switch (wanted_mode) {
       case 'INACTIF':
         new_mode = 'FONCTIONNEL';
         break;
@@ -91,6 +91,14 @@ async function handleModeChange(
         'content-type': 'application/json',
       },
     });
+  } else if (new_mode === 'FONCTIONNEL' && tracker.mode === 'INACTIF') {
+    await fetch(
+      `https://next-js-starter-lyart.vercel.app/api/wake-tracker?trackerId=${tracker.id}&source=site`,
+    );
+  } else if (new_mode === 'INACTIF') {
+    await fetch(
+      `https://next-js-starter-lyart.vercel.app/api/shutdown-tracker?trackerId=${tracker.id}&source=site`,
+    );
   } else {
     const submitData = {
       id: tracker.id,
