@@ -21,7 +21,7 @@ export async function PATCH(req: Request, res: any) {
     });
 
     const topic = `t/t/${updatedTracker.id}`;
-    const messageString = `{"ind": 2}`;
+    const messageString = `{"ind": 3}`;
     publishMessage(topic, messageString);
 
     return NextResponse.json(updatedTracker, { status: 200 });

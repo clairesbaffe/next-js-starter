@@ -121,50 +121,35 @@ async function handleModeChange(
   return new_mode;
 }
 
-async function handleStartPauseTracking(
-  tracker: any,
-  selectedOption: string,
-  event?: any,
-) {
-  let pause_duration;
-  let hours;
-  let minutes;
-  let seconds;
-  let pause;
-
-  if (event) {
-    event.preventDefault();
-    const form = event.target;
-    if (selectedOption === 'pause') {
-      hours = form.pause_duration_h.value;
-      minutes = form.pause_duration_m.value;
-      seconds = form.pause_duration_s.value;
-      pause_duration =
-        parseInt(seconds) + parseInt(minutes) * 60 + parseInt(hours) * 3600;
-    }
-  }
-
+async function togglePauseTracking(tracker: any, selectedOption: string) {
   if (selectedOption === 'pause') {
-    const submitData = {
-      trackerId: tracker.id,
-      duration: pause_duration,
-    };
-    await fetch('https://next-js-starter-lyart.vercel.app/api/pause-tracking', {
-      method: 'PATCH',
-      body: JSON.stringify(submitData),
-      headers: {
-        'content-type': 'application/json',
+    await fetch(
+      'https://next-js-starter-lyart.vercel.app/api/toggle-pause-tracking',
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ trackerId: tracker.id, start_pause: true }),
+        headers: {
+          'content-type': 'application/json',
+        },
       },
-    });
-  } else {
-    const submitData = {
-      trackerId: tracker.id,
-    };
+    );
+  } else if (selectedOption === 'cancel') {
     await fetch(
       'https://next-js-starter-lyart.vercel.app/api/cancel-tracking',
       {
         method: 'PATCH',
-        body: JSON.stringify(submitData),
+        body: JSON.stringify({ trackerId: tracker.id }),
+        headers: {
+          'content-type': 'application/json',
+        },
+      },
+    );
+  } else {
+    await fetch(
+      'https://next-js-starter-lyart.vercel.app/api/toggle-pause-tracking',
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ trackerId: tracker.id, start_pause: false }),
         headers: {
           'content-type': 'application/json',
         },
@@ -194,15 +179,10 @@ async function handleTrackerDelete(tracker_id: number) {
 }
 
 export default function TrackerItem({ tracker }: { tracker: any }) {
-  const [trackerMode, setTrackerMode] = useState(tracker.mode);
   const [modalDeleteTrackerIsOpen, setModalDeleteTrackerIsOpen] =
     useState(false);
   const [modalToggleTrackerPauseIsOpen, setModalToggleTrackerPauseIsOpen] =
     useState(false);
-  const [modalToggleTrackingPauseIsOpen, setModalToggleTrackingPauseIsOpen] =
-    useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
-  const [pauseDuration, setPauseDuration] = useState('');
   const [pauseHours, setPauseHours] = useState(0);
   const [pauseMinutes, setPauseMinutes] = useState(0);
   const [pauseSeconds, setPauseSeconds] = useState(0);
@@ -219,17 +199,6 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
   };
   const closeModalToggleTrackerPause = () => {
     setModalToggleTrackerPauseIsOpen(false);
-  };
-
-  const openModalToggleTrackingPause = () => {
-    setModalToggleTrackingPauseIsOpen(true);
-  };
-  const closeModalToggleTrackingPause = () => {
-    setModalToggleTrackingPauseIsOpen(false);
-  };
-
-  const handleOptionChange = (e: any) => {
-    setSelectedOption(e.target.value);
   };
   const handlePauseDurationChange = (setter: any) => (e: any) => {
     setter(e.target.value);
@@ -325,114 +294,10 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
         </div>
       </Modal>
 
-      <Modal
-        isOpen={modalToggleTrackingPauseIsOpen}
-        onRequestClose={closeModalToggleTrackingPause}
-        ariaHideApp={false}
-        className={styles.modalContainer}
-        overlayClassName={styles.modalOverlay}
-      >
-        <div className="componentContainer space-y-8">
-          <h1>Mettre en pause ou annuler le tracking ?</h1>
-          <FontAwesomeIcon
-            className="closeAddTrackerModal"
-            onClick={closeModalToggleTrackingPause}
-            icon={faXmark}
-          />
-          <form
-            onSubmit={(event) =>
-              handleStartPauseTracking(tracker, selectedOption, event)
-            }
-            className="formContainer space-y-6"
-          >
-            <div>
-              <label>
-                <input
-                  type="radio"
-                  value="pause"
-                  checked={selectedOption === 'pause'}
-                  onChange={handleOptionChange}
-                />
-                Mettre en pause
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="cancel"
-                  checked={selectedOption === 'cancel'}
-                  onChange={handleOptionChange}
-                />
-                Annuler
-              </label>
-            </div>
-
-            {selectedOption === 'pause' && (
-              <div>
-                <div className="displayRow">
-                  <div className="displayColumn">
-                    <label htmlFor="pause_duration_h">heures</label>
-                    <input
-                      className="input-style"
-                      type="number"
-                      name="pause_duration_h"
-                      id="pause_duration_h"
-                      required
-                      min={0}
-                      max={59}
-                      value={pauseHours}
-                      onChange={handlePauseDurationChange(setPauseHours)}
-                    />
-                  </div>
-
-                  <span> : </span>
-                  <div className="displayColumn">
-                    <label htmlFor="pause_duration_m">minutes</label>
-                    <input
-                      className="input-style"
-                      type="number"
-                      name="pause_duration_m"
-                      id="pause_duration_m"
-                      required
-                      min={0}
-                      max={59}
-                      value={pauseMinutes}
-                      onChange={handlePauseDurationChange(setPauseMinutes)}
-                    />
-                  </div>
-
-                  <span> : </span>
-
-                  <div className="displayColumn">
-                    <label htmlFor="pause_duration_s">secondes</label>
-                    <input
-                      className="input-style"
-                      type="number"
-                      name="pause_duration_s"
-                      id="pause_duration_s"
-                      required
-                      min={0}
-                      max={59}
-                      value={pauseSeconds}
-                      onChange={handlePauseDurationChange(setPauseSeconds)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-            <input
-              type="submit"
-              value="Enregistrer"
-              className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100"
-            />
-          </form>
-        </div>
-      </Modal>
-
       <div className="left-side">
         <h1>{tracker.nom}</h1>
-        <p>{renderModeDescription(trackerMode, tracker.pause_tracking)}</p>
-        {(tracker.mode === 'PAUSE' ||
-          (tracker.mode === 'TRACKING' && tracker.pause_tracking)) && (
+        <p>{renderModeDescription(tracker.mode, tracker.pause_tracking)}</p>
+        {tracker.mode === 'PAUSE' && (
           <p>
             Fin de la pause :{' '}
             {new Date(tracker.pause_end_time).toLocaleTimeString('fr-FR', {
@@ -447,68 +312,74 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
       </div>
       <div className="right-side">
         <div>
-          <Popup
-            trigger={
-              <FontAwesomeIcon
-                className="tracker-menu-icon"
-                icon={faEllipsis}
-              />
-            }
-            position="bottom right"
-            contentStyle={{ width: 'fit-content' }}
-          >
-            <div>
-              <button
-                className="tracker-menu-button"
-                onClick={() =>
-                  setTrackerMode(handleModeChange(tracker, 'FONCTIONNEL', true))
-                }
-              >
+          {tracker.mode !== 'PAUSE' && tracker.mode !== 'TRACKING' && (
+            <Popup
+              trigger={
                 <FontAwesomeIcon
-                  icon={faPlay}
-                  className="mini-tracker-mode-icon"
-                  id="on-mode"
+                  className="tracker-menu-icon"
+                  icon={faEllipsis}
                 />
-                Mettre en marche
-              </button>
-              <button
-                className="tracker-menu-button"
-                onClick={openModalToggleTrackerPause}
-              >
-                <FontAwesomeIcon
-                  icon={faPause}
-                  className="mini-tracker-mode-icon"
-                  id="pause-mode"
-                />
-                Mettre en pause
-              </button>
-              <button
-                className="tracker-menu-button"
-                onClick={() =>
-                  setTrackerMode(handleModeChange(tracker, 'INACTIF', true))
-                }
-              >
-                <FontAwesomeIcon
-                  icon={faPowerOff}
-                  className="mini-tracker-mode-icon"
-                  id="off-mode"
-                />
-                Eteindre
-              </button>
-              <hr />
-              <button
-                className="tracker-menu-button"
-                onClick={openModalDeleteTracker}
-              >
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  className="mini-tracker-mode-icon"
-                  id="tracking-mode"
-                />
-                Supprimer le tracker
-              </button>
-            </div>
-          </Popup>
+              }
+              position="bottom right"
+              contentStyle={{ width: 'fit-content' }}
+            >
+              <div>
+                {tracker.mode === 'INACTIF' && (
+                  <button
+                    className="tracker-menu-button"
+                    onClick={() =>
+                      handleModeChange(tracker, 'FONCTIONNEL', true)
+                    }
+                  >
+                    <FontAwesomeIcon
+                      icon={faPlay}
+                      className="mini-tracker-mode-icon"
+                      id="on-mode"
+                    />
+                    Mettre en marche
+                  </button>
+                )}
+                {tracker.mode === 'FONCTIONNEL' && (
+                  <button
+                    className="tracker-menu-button"
+                    onClick={openModalToggleTrackerPause}
+                  >
+                    <FontAwesomeIcon
+                      icon={faPause}
+                      className="mini-tracker-mode-icon"
+                      id="pause-mode"
+                    />
+                    Mettre en pause
+                  </button>
+                )}
+                {tracker.mode === 'FONCTIONNEL' && (
+                  <button
+                    className="tracker-menu-button"
+                    onClick={() => handleModeChange(tracker, 'INACTIF', true)}
+                  >
+                    <FontAwesomeIcon
+                      icon={faPowerOff}
+                      className="mini-tracker-mode-icon"
+                      id="off-mode"
+                    />
+                    Eteindre
+                  </button>
+                )}
+                <hr />
+                <button
+                  className="tracker-menu-button"
+                  onClick={openModalDeleteTracker}
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    className="mini-tracker-mode-icon"
+                    id="tracking-mode"
+                  />
+                  Supprimer le tracker
+                </button>
+              </div>
+            </Popup>
+          )}
         </div>
 
         <Modal
@@ -530,12 +401,8 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
           </button>
         </Modal>
 
-        {trackerMode === 'INACTIF' && (
-          <div
-            onClick={() =>
-              setTrackerMode(handleModeChange(tracker, trackerMode, false))
-            }
-          >
+        {tracker.mode === 'INACTIF' && (
+          <div onClick={() => handleModeChange(tracker, tracker.mode, false)}>
             <FontAwesomeIcon
               icon={faPowerOff}
               className="tracker-mode-icon"
@@ -544,7 +411,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
           </div>
         )}
 
-        {trackerMode === 'FONCTIONNEL' && (
+        {tracker.mode === 'FONCTIONNEL' && (
           <div onClick={openModalToggleTrackerPause}>
             <FontAwesomeIcon
               icon={faPlay}
@@ -553,12 +420,8 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
             />
           </div>
         )}
-        {trackerMode === 'PAUSE' && (
-          <div
-            onClick={() =>
-              setTrackerMode(handleModeChange(tracker, trackerMode, false))
-            }
-          >
+        {tracker.mode === 'PAUSE' && (
+          <div onClick={() => handleModeChange(tracker, tracker.mode, false)}>
             <FontAwesomeIcon
               icon={faPause}
               className="tracker-mode-icon"
@@ -566,21 +429,48 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
             />
           </div>
         )}
-        {trackerMode === 'TRACKING' && !tracker.pause_tracking && (
-          <div onClick={openModalToggleTrackingPause}>
-            <FontAwesomeIcon
-              icon={faCrosshairs}
-              className="tracker-mode-icon"
-              id="tracking-mode"
-            />
+        {tracker.mode === 'TRACKING' && !tracker.pause_tracking && (
+          <div>
+            <Popup
+              trigger={
+                <FontAwesomeIcon
+                  icon={faCrosshairs}
+                  className="tracker-mode-icon"
+                  id="tracking-mode"
+                />
+              }
+              position="bottom right"
+              contentStyle={{ width: 'fit-content' }}
+            >
+              <div>
+                <button
+                  className="tracker-menu-button"
+                  onClick={() => togglePauseTracking(tracker, 'pause')}
+                >
+                  <FontAwesomeIcon
+                    icon={faPause}
+                    className="mini-tracker-mode-icon"
+                    id="pause-tracking-mode"
+                  />
+                  Mettre en pause le tracking
+                </button>
+                <button
+                  className="tracker-menu-button"
+                  onClick={() => togglePauseTracking(tracker, 'cancel')}
+                >
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    className="mini-tracker-mode-icon"
+                    id="on-mode"
+                  />
+                  Annuler le tracking
+                </button>
+              </div>
+            </Popup>
           </div>
         )}
-        {trackerMode === 'TRACKING' && tracker.pause_tracking && (
-          <div
-          // onClick={() =>
-          //   setTrackerMode(handleModeChange(tracker, trackerMode, false))
-          // }
-          >
+        {tracker.mode === 'TRACKING' && tracker.pause_tracking && (
+          <div onClick={() => togglePauseTracking(tracker, 'end-pause')}>
             <FontAwesomeIcon
               icon={faCrosshairs}
               className="tracker-mode-icon"

@@ -27,7 +27,7 @@ export async function PATCH(req: Request, res: any) {
     });
 
     // Start a timer for this tracker
-    startTrackerTimer(trackerId, duration, 'FONCTIONNEL');
+    startTrackerTimer(trackerId, duration);
 
     return NextResponse.json(updatedTracker, { status: 200 });
   } catch (error) {
