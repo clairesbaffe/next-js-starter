@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { TrackersListProps } from './types';
 import 'mapbox-gl/dist/mapbox-gl.css';
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
@@ -41,13 +41,16 @@ function createAndAddMarker(
   coordinates: any,
   className: string,
   popupHTML: string,
+  markersRef: any,
 ) {
   const el = document.createElement('div');
   el.className = className;
-  new mapboxgl.Marker(el)
+  const marker = new mapboxgl.Marker(el)
     .setLngLat(coordinates)
     .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(popupHTML))
     .addTo(map);
+
+  markersRef.current.push(marker);
 }
 
 function addControls() {
@@ -69,7 +72,7 @@ function addControls() {
   map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 }
 
-function addMarkers(geojson: any) {
+function addMarkers(geojson: any, markersRef: any) {
   geojson.forEach((tracker: any) => {
     if (tracker.historiques.length > 0) {
       if (tracker.mode === 'TRACKING') {
@@ -88,6 +91,7 @@ function addMarkers(geojson: any) {
             [location.longitude, location.latitude],
             getMarkerClass(tracker, isLast),
             createPopupHTML(tracker, location),
+            markersRef,
           );
         });
       } else {
@@ -97,6 +101,7 @@ function addMarkers(geojson: any) {
           [last_location.longitude, last_location.latitude],
           getMarkerClass(tracker, true),
           createPopupHTML(tracker, last_location),
+          markersRef,
         );
       }
     }
@@ -105,6 +110,7 @@ function addMarkers(geojson: any) {
 
 function MapComponent({ initialTrackers }: TrackersListProps) {
   const [geojson, setGeojson] = useState(initialTrackers);
+  const markersRef = useRef<any[]>([]);
 
   async function loadMap() {
     map = new mapboxgl.Map({
@@ -114,14 +120,34 @@ function MapComponent({ initialTrackers }: TrackersListProps) {
       zoom: 11,
     });
 
-    addMarkers(geojson);
-
+    addMarkers(geojson, markersRef);
     addControls();
   }
 
   useEffect(() => {
     loadMap();
+
+    return () => {
+      if (map) {
+        map.remove();
+      }
+    };
   }, []);
+
+  useEffect(() => {
+    if (map) {
+      // Supprimez les anciens marqueurs
+      markersRef.current.forEach((marker) => marker.remove());
+      markersRef.current = [];
+
+      // Ajoutez les nouveaux marqueurs
+      addMarkers(geojson, markersRef);
+    }
+  }, [geojson]);
+
+  useEffect(() => {
+    setGeojson(initialTrackers);
+  }, [initialTrackers]);
 
   return <div id="map" />;
 }
