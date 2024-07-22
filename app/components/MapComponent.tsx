@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { TrackersListProps } from './types';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { log } from 'console';
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
 type ExtendedTrackersListProps = TrackersListProps & {
@@ -120,14 +119,22 @@ function MapComponent({
     const className = element.className;
     let shouldDisplay = false;
 
+    // SI PAS DE FILTRES CHOISIS
+    if (rucher_filter.length === 0 && mode_filter === '') {
+      shouldDisplay = true;
+    }
+
+    // FILTRER PAR RUCHER
     rucher_filter.forEach((rucher_name) => {
-      const regex = new RegExp(`-${rucher_name}\\b`);
-      if (regex.test(className)) {
+      const regexRucher = new RegExp(`-${rucher_name}\\b`);
+      if (regexRucher.test(className)) {
         shouldDisplay = true;
       }
     });
 
-    if (rucher_filter.length === 0) {
+    // FILTRER PAR MODE
+    const regexMode = new RegExp(`${mode_filter}-\\b`);
+    if (regexMode.test(className)) {
       shouldDisplay = true;
     }
 
