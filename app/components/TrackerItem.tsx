@@ -421,7 +421,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
           </div>
         )}
         {tracker.mode === 'PAUSE' && (
-          <div onClick={() => handleModeChange(tracker, tracker.mode, false)}>
+          <div>
             <FontAwesomeIcon
               icon={faPause}
               className="tracker-mode-icon"
