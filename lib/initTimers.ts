@@ -9,5 +9,5 @@ export async function initializePausedTrackers() {
   if (initialized) return;
   initialized = true;
 
-  await fetch('http://localhost:3000/api/restore-timers');
+  await fetch('https://next-js-starter-lyart.vercel.app/api/restore-timers');
 }
