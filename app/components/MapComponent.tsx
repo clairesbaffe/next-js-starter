@@ -3,7 +3,13 @@
 import { useEffect, useState } from 'react';
 import { TrackersListProps } from './types';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { log } from 'console';
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+
+type ExtendedTrackersListProps = TrackersListProps & {
+  rucher_filter: string[];
+  mode_filter: string;
+};
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY;
 
@@ -14,15 +20,15 @@ function getMarkerClass(tracker: any, isLast: Boolean) {
     case 'TRACKING':
       return isLast
         ? tracker.pause_tracking
-          ? 'last-marker-pause'
-          : 'last-marker'
-        : 'previous-marker marker';
+          ? `last-marker-pause marker ${tracker.mode}-${tracker.ruche.rucher.nom}`
+          : `last-marker marker ${tracker.mode}-${tracker.ruche.rucher.nom}`
+        : `previous-marker marker ${tracker.mode}-${tracker.ruche.rucher.nom}`;
     case 'INACTIF':
-      return 'off-marker marker';
+      return `off-marker marker ${tracker.mode}-${tracker.ruche.rucher.nom}`;
     case 'FONCTIONNEL':
-      return 'on-marker marker';
+      return `on-marker marker ${tracker.mode}-${tracker.ruche.rucher.nom}`;
     case 'PAUSE':
-      return 'pause-marker marker';
+      return `pause-marker marker ${tracker.mode}-${tracker.ruche.rucher.nom}`;
     default:
       return '';
   }
@@ -103,8 +109,30 @@ function addMarkers(geojson: any) {
   });
 }
 
-function MapComponent({ initialTrackers }: TrackersListProps) {
+function MapComponent({
+  initialTrackers,
+  rucher_filter,
+  mode_filter,
+}: ExtendedTrackersListProps) {
   const [geojson, setGeojson] = useState(initialTrackers);
+
+  document.querySelectorAll('.marker').forEach((element) => {
+    const className = element.className;
+    let shouldDisplay = false;
+
+    rucher_filter.forEach((rucher_name) => {
+      const regex = new RegExp(`-${rucher_name}\\b`);
+      if (regex.test(className)) {
+        shouldDisplay = true;
+      }
+    });
+
+    if (rucher_filter.length === 0) {
+      shouldDisplay = true;
+    }
+
+    (element as HTMLElement).style.display = shouldDisplay ? 'block' : 'none';
+  });
 
   async function loadMap() {
     map = new mapboxgl.Map({

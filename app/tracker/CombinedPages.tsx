@@ -13,19 +13,19 @@ import {
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-import { CombinedPagesProps } from '../components/types';
+import { CombinedPagesProps, Tracker } from '../components/types';
 import MapComponent from '../components/MapComponent';
 import TrackersList from '../components/TrackersList';
 import TrackerForm from '../components/TrackerForm';
 
 function CombinedPages({ initialTrackers, balances }: CombinedPagesProps) {
   const [trackers, setTrackers] = useState(initialTrackers);
-  const [ruchers, setRuchers] = useState('');
+  const [ruchers, setRuchers] = useState<string[]>([]);
   const [mode, setMode] = useState('');
 
   // UPDATE TRACKERS LIST AT ANY MOMENT WITH USESTATE
   const filteredTrackers = trackers.filter(
-    (tracker: any) =>
+    (tracker: Tracker) =>
       (ruchers.length === 0 || ruchers.includes(tracker.ruche.rucher.nom)) &&
       (mode.length === 0 || tracker.mode === mode),
   );
@@ -168,7 +168,11 @@ function CombinedPages({ initialTrackers, balances }: CombinedPagesProps) {
         </TabList>
 
         <TabPanel forceRender={true}>
-          <MapComponent initialTrackers={filteredTrackers} />
+          <MapComponent
+            initialTrackers={filteredTrackers}
+            rucher_filter={ruchers}
+            mode_filter={mode}
+          />
         </TabPanel>
         <TabPanel className={'trackerListPanel'}>
           <TrackerForm balances={balances} />
