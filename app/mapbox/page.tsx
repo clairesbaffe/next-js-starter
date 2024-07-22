@@ -25,7 +25,7 @@ export default async function Page() {
       {/* <button onClick={initialiseMap} className="btn btn-outline btn-primary">
         REFRESH
       </button> */}
-      <MapComponent initialTrackers={geojson} />
+      {/* <MapComponent initialTrackers={geojson} /> */}
     </div>
   );
 }
