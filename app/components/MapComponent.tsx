@@ -115,31 +115,38 @@ function MapComponent({
 }: ExtendedTrackersListProps) {
   const [geojson, setGeojson] = useState(initialTrackers);
 
-  document.querySelectorAll('.marker').forEach((element) => {
-    const className = element.className;
-    let shouldDisplay = false;
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.querySelectorAll('.marker').forEach((element) => {
+        const className = element.className;
+        let shouldDisplay = false;
 
-    // SI PAS DE FILTRES CHOISIS
-    if (rucher_filter.length === 0 && mode_filter === '') shouldDisplay = true;
+        // SI PAS DE FILTRES CHOISIS
+        if (rucher_filter.length === 0 && mode_filter === '')
+          shouldDisplay = true;
 
-    // FILTRER PAR MODE
-    const regexMode = new RegExp(`${mode_filter}-\\b`); // si pas de mode choisi, true par défaut
-    if (regexMode.test(className)) {
-      // FILTRER PAR RUCHER
-      if (rucher_filter.length > 0) {
-        rucher_filter.forEach((rucher_name) => {
-          const regexRucher = new RegExp(`-${rucher_name}\\b`);
-          if (regexRucher.test(className)) {
+        // FILTRER PAR MODE
+        const regexMode = new RegExp(`${mode_filter}-\\b`); // si pas de mode choisi, true par défaut
+        if (regexMode.test(className)) {
+          // FILTRER PAR RUCHER
+          if (rucher_filter.length > 0) {
+            rucher_filter.forEach((rucher_name) => {
+              const regexRucher = new RegExp(`-${rucher_name}\\b`);
+              if (regexRucher.test(className)) {
+                shouldDisplay = true;
+              }
+            });
+          } else {
             shouldDisplay = true;
           }
-        });
-      } else {
-        shouldDisplay = true;
-      }
-    }
+        }
 
-    (element as HTMLElement).style.display = shouldDisplay ? 'block' : 'none';
-  });
+        (element as HTMLElement).style.display = shouldDisplay
+          ? 'block'
+          : 'none';
+      });
+    }
+  }, [rucher_filter, mode_filter]); // re-run effect when filters change
 
   async function loadMap() {
     map = new mapboxgl.Map({
