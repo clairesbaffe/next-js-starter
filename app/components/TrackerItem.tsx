@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEllipsis,
@@ -10,11 +12,12 @@ import {
   faTrash,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Modal from 'react-modal';
 import styles from './Modal.module.css';
+
+import ModalDeleteTracker from './ModalDeleteTrackerComponent';
 
 function renderModeDescription(
   mode: string,
@@ -156,24 +159,6 @@ async function togglePauseTracking(tracker: any, selectedOption: string) {
       },
     );
   }
-
-  window.location.reload();
-}
-
-async function handleTrackerDelete(tracker_id: number) {
-  const submitData = {
-    id: tracker_id,
-  };
-  await fetch(
-    'https://next-js-starter-lyart.vercel.app/api/delete-tracker-by-id',
-    {
-      method: 'DELETE',
-      body: JSON.stringify(submitData),
-      headers: {
-        'content-type': 'application/json',
-      },
-    },
-  );
 
   window.location.reload();
 }
@@ -382,24 +367,11 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
           )}
         </div>
 
-        <Modal
+        <ModalDeleteTracker
           isOpen={modalDeleteTrackerIsOpen}
           onRequestClose={closeModalDeleteTracker}
-          contentLabel="Example Modal"
-          ariaHideApp={false}
-          className={styles.modalContainer}
-          overlayClassName={styles.modalOverlay}
-        >
-          <p>Supprimer le tracker ?</p>
-          <button onClick={closeModalDeleteTracker}>Non</button>
-          <button
-            onClick={() => {
-              handleTrackerDelete(tracker.id);
-            }}
-          >
-            Oui
-          </button>
-        </Modal>
+          trackerId={tracker.id}
+        />
 
         {tracker.mode === 'INACTIF' && (
           <div onClick={() => handleModeChange(tracker, tracker.mode, false)}>
