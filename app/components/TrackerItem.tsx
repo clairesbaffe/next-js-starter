@@ -10,14 +10,12 @@ import {
   faPowerOff,
   faPlay,
   faTrash,
-  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import Modal from 'react-modal';
-import styles from './Modal.module.css';
 
 import ModalDeleteTracker from './ModalDeleteTrackerComponent';
+import ModalToggleTrackerPause from './ModalToggleTrackerPauseComponent';
 
 function renderModeDescription(
   mode: string,
@@ -168,9 +166,6 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
     useState(false);
   const [modalToggleTrackerPauseIsOpen, setModalToggleTrackerPauseIsOpen] =
     useState(false);
-  const [pauseHours, setPauseHours] = useState(0);
-  const [pauseMinutes, setPauseMinutes] = useState(0);
-  const [pauseSeconds, setPauseSeconds] = useState(0);
 
   const openModalDeleteTracker = () => {
     setModalDeleteTrackerIsOpen(true);
@@ -185,99 +180,15 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
   const closeModalToggleTrackerPause = () => {
     setModalToggleTrackerPauseIsOpen(false);
   };
-  const handlePauseDurationChange = (setter: any) => (e: any) => {
-    setter(e.target.value);
-  };
 
   return (
     <div className="tracker-container">
-      <Modal
+      <ModalToggleTrackerPause
         isOpen={modalToggleTrackerPauseIsOpen}
         onRequestClose={closeModalToggleTrackerPause}
-        ariaHideApp={false}
-        className={styles.modalContainer}
-        overlayClassName={styles.modalOverlay}
-      >
-        <div className="componentContainer space-y-8">
-          <h1>Temps de pause</h1>
-          <FontAwesomeIcon
-            className="closeAddTrackerModal"
-            onClick={closeModalToggleTrackerPause}
-            icon={faXmark}
-          />
-          <form
-            onSubmit={(event) =>
-              handleModeChange(tracker, tracker.mode, false, event)
-            }
-            className="formContainer space-y-6"
-          >
-            <div>
-              <input
-                type="checkbox"
-                name="deplacement"
-                id="deplacement"
-                defaultChecked={false}
-              />
-              <label htmlFor="deplacement">Déplacement ?</label>
-            </div>
-            <div className="displayRow">
-              <div className="displayColumn">
-                <label htmlFor="pause_duration_h">heures</label>
-                <input
-                  className="input-style"
-                  type="number"
-                  name="pause_duration_h"
-                  id="pause_duration_h"
-                  required
-                  min={0}
-                  max={59}
-                  value={pauseHours}
-                  onChange={handlePauseDurationChange(setPauseHours)}
-                />
-              </div>
-
-              <span> : </span>
-              <div className="displayColumn">
-                <label htmlFor="pause_duration_m">minutes</label>
-                <input
-                  className="input-style"
-                  type="number"
-                  name="pause_duration_m"
-                  id="pause_duration_m"
-                  required
-                  min={0}
-                  max={59}
-                  value={pauseMinutes}
-                  onChange={handlePauseDurationChange(setPauseMinutes)}
-                />
-              </div>
-
-              <span> : </span>
-
-              <div className="displayColumn">
-                <label htmlFor="pause_duration_s">secondes</label>
-                <input
-                  className="input-style"
-                  type="number"
-                  name="pause_duration_s"
-                  id="pause_duration_s"
-                  required
-                  min={0}
-                  max={59}
-                  value={pauseSeconds}
-                  onChange={handlePauseDurationChange(setPauseSeconds)}
-                />
-              </div>
-            </div>
-
-            <input
-              type="submit"
-              value="Enregistrer"
-              className="rounded border border-gray-400 bg-white px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100"
-            />
-          </form>
-        </div>
-      </Modal>
+        handleModeChange={handleModeChange}
+        tracker={tracker}
+      />
 
       <div className="left-side">
         <h1>{tracker.nom}</h1>
