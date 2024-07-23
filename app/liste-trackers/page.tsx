@@ -1,5 +1,5 @@
 import './style.css';
-import TrackerForm from '../components/TrackerForm';
+import TrackerForm from '../components/ModalAddTracker';
 import TrackersList from '../components/TrackersList';
 import { revalidateTag } from 'next/cache';
 

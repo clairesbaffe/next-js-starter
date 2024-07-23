@@ -16,7 +16,7 @@ import 'react-tabs/style/react-tabs.css';
 import { CombinedPagesProps, Tracker } from '../components/types';
 import MapComponent from '../components/MapComponent';
 import TrackersList from '../components/TrackersList';
-import TrackerForm from '../components/TrackerForm';
+import TrackerForm from '../components/ModalAddTracker';
 
 function CombinedPages({ initialTrackers, balances }: CombinedPagesProps) {
   const [trackers, setTrackers] = useState(initialTrackers);

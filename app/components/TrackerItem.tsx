@@ -16,6 +16,7 @@ import 'reactjs-popup/dist/index.css';
 
 import ModalDeleteTracker from './ModalDeleteTrackerComponent';
 import ModalToggleTrackerPause from './ModalToggleTrackerPauseComponent';
+import ModalActivateTracker from './ModalActivateTrackerComponent';
 
 function renderModeDescription(
   mode: string,
@@ -166,6 +167,8 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
     useState(false);
   const [modalToggleTrackerPauseIsOpen, setModalToggleTrackerPauseIsOpen] =
     useState(false);
+  const [modalActivateTrackerIsOpen, setModalActivateTrackerIsOpen] =
+    useState(false);
 
   const openModalDeleteTracker = () => {
     setModalDeleteTrackerIsOpen(true);
@@ -181,11 +184,31 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
     setModalToggleTrackerPauseIsOpen(false);
   };
 
+  const openModalActivateTracker = () => {
+    setModalActivateTrackerIsOpen(true);
+  };
+  const closeModalActivateTracker = () => {
+    setModalActivateTrackerIsOpen(false);
+  };
+
   return (
     <div className="tracker-container">
       <ModalToggleTrackerPause
         isOpen={modalToggleTrackerPauseIsOpen}
         onRequestClose={closeModalToggleTrackerPause}
+        handleModeChange={handleModeChange}
+        tracker={tracker}
+      />
+
+      <ModalDeleteTracker
+        isOpen={modalDeleteTrackerIsOpen}
+        onRequestClose={closeModalDeleteTracker}
+        trackerId={tracker.id}
+      />
+
+      <ModalActivateTracker
+        isOpen={modalActivateTrackerIsOpen}
+        onRequestClose={closeModalActivateTracker}
         handleModeChange={handleModeChange}
         tracker={tracker}
       />
@@ -223,9 +246,7 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
                 {tracker.mode === 'INACTIF' && (
                   <button
                     className="tracker-menu-button"
-                    onClick={() =>
-                      handleModeChange(tracker, 'FONCTIONNEL', true)
-                    }
+                    onClick={openModalActivateTracker}
                   >
                     <FontAwesomeIcon
                       icon={faPlay}
@@ -278,14 +299,8 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
           )}
         </div>
 
-        <ModalDeleteTracker
-          isOpen={modalDeleteTrackerIsOpen}
-          onRequestClose={closeModalDeleteTracker}
-          trackerId={tracker.id}
-        />
-
         {tracker.mode === 'INACTIF' && (
-          <div onClick={() => handleModeChange(tracker, tracker.mode, false)}>
+          <div onClick={openModalActivateTracker}>
             <FontAwesomeIcon
               icon={faPowerOff}
               className="tracker-mode-icon"

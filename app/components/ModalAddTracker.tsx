@@ -6,19 +6,15 @@ import styles from './Modal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-import { RuchesListProps } from '../components/types';
+import { RuchesListProps } from './types';
 import './TrackerFormComponent.css';
 
-async function addTracker(
-  nom: string,
-  ruche_id: string,
-  selectedBalance: number,
-) {
+async function addTracker(nom: string, selectedBalance: number) {
   const submitData = {
     nom: nom,
     ruche_id: selectedBalance,
   };
-  await fetch('https://next-js-starter-lyart.vercel.app/api/add-tracker', {
+  await fetch('http://localhost:3000/api/add-tracker', {
     method: 'POST',
     body: JSON.stringify(submitData),
     headers: {
@@ -42,9 +38,8 @@ const TrackerForm = ({ balances }: RuchesListProps) => {
     event.preventDefault();
     const form = event.target;
     const nom = form.nom.value;
-    const ruche_id = form.ruche_id.value;
 
-    await addTracker(nom, ruche_id, selectedBalance);
+    await addTracker(nom, selectedBalance);
 
     window.location.reload();
   };
@@ -76,7 +71,7 @@ const TrackerForm = ({ balances }: RuchesListProps) => {
           />
           <form onSubmit={handleSubmit} className="formContainer space-y-6">
             <div className="displayRow space-x-4">
-              <div className="inputGroup inputGroupLeft">
+              <div className="inputGroup inputGroupLarge">
                 <input
                   type="text"
                   name="nom"
@@ -86,18 +81,6 @@ const TrackerForm = ({ balances }: RuchesListProps) => {
                 />
                 <label htmlFor="nom" className="formLabel">
                   Nom du tracker
-                </label>
-              </div>
-              <div className="inputGroup">
-                <input
-                  type="text"
-                  name="ruche_id"
-                  id="ruche_id"
-                  required
-                  autoComplete="off"
-                />
-                <label htmlFor="ruche_id" className="formLabel">
-                  ID
                 </label>
               </div>
             </div>
