@@ -10,8 +10,6 @@ type ExtendedTrackersListProps = TrackersListProps & {
   mode_filter: string;
 };
 
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY;
-
 let map: any;
 
 function getMarkerClass(tracker: any, isLast: Boolean) {
@@ -116,6 +114,41 @@ function MapComponent({
   const [geojson, setGeojson] = useState(initialTrackers);
 
   useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/service-worker.js', { scope: '/' })
+        .then((registration) => {
+          // console.log('Service Worker enregistré avec succès:', registration);
+
+          // Forcer l'activation immédiate du nouveau service worker
+          if (registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (
+                  newWorker.state === 'installed' &&
+                  navigator.serviceWorker.controller
+                ) {
+                  newWorker.postMessage({ type: 'SKIP_WAITING' });
+                }
+              });
+            }
+          });
+        })
+        .catch((error) => {
+          // console.log('Échec de l\'enregistrement du Service Worker:', error);
+        });
+
+      // Écouter les messages du service worker
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+    }
+
     if (typeof document !== 'undefined') {
       document.querySelectorAll('.marker').forEach((element) => {
         const className = element.className;
@@ -149,6 +182,8 @@ function MapComponent({
   }, [rucher_filter, mode_filter]); // re-run effect when filters change
 
   async function loadMap() {
+    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY;
+
     map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
