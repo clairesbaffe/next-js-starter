@@ -43,7 +43,8 @@ export interface TrackersListProps {
   setTrackers: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-export interface CombinedPagesProps extends TrackersListProps {
+export interface CombinedPagesProps {
+  initialTrackers: Tracker[];
   balances: Ruche[];
 }
 
