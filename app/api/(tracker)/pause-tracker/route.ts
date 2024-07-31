@@ -3,17 +3,10 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import { startTrackerTimer } from '../../../../lib/timer';
 
-function addSeconds(date: Date, seconds: number) {
-  date.setSeconds(date.getSeconds() + seconds);
-  return date;
-}
-
 export async function PATCH(req: Request, res: any) {
   try {
-    const { trackerId, duration, deplacement } = await req.json();
-
-    let date = new Date();
-    const pause_end_time = addSeconds(date, parseInt(duration));
+    const { trackerId, duration, deplacement, pause_end_time } =
+      await req.json();
 
     const updatedTracker = await prisma.tracker.update({
       where: { id: trackerId },

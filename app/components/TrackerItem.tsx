@@ -18,6 +18,12 @@ import ModalDeleteTracker from './ModalDeleteTrackerComponent';
 import ModalToggleTrackerPause from './ModalToggleTrackerPauseComponent';
 import ModalActivateTracker from './ModalActivateTrackerComponent';
 
+type TrackerItemProps = {
+  tracker: any;
+  setTrackers: React.Dispatch<React.SetStateAction<any[]>>;
+  trackers: any[];
+};
+
 function renderModeDescription(
   mode: string,
   pause_tracking: boolean | undefined,
@@ -37,132 +43,11 @@ function renderModeDescription(
   }
 }
 
-async function handleModeChange(
-  tracker: any,
-  wanted_mode: string,
-  change_to_specified_mode: boolean,
-  event?: any,
-) {
-  let pause_duration;
-  let hours;
-  let minutes;
-  let seconds;
-  let deplacement;
-
-  if (event) {
-    event.preventDefault();
-    const form = event.target;
-    hours = form.pause_duration_h.value;
-    minutes = form.pause_duration_m.value;
-    seconds = form.pause_duration_s.value;
-    pause_duration =
-      parseInt(seconds) + parseInt(minutes) * 60 + parseInt(hours) * 3600;
-    deplacement = form.deplacement.checked;
-  }
-
-  let new_mode;
-  if (change_to_specified_mode) {
-    new_mode = wanted_mode;
-  } else {
-    switch (wanted_mode) {
-      case 'INACTIF':
-        new_mode = 'FONCTIONNEL';
-        break;
-      case 'FONCTIONNEL':
-        new_mode = 'PAUSE';
-        break;
-      case 'PAUSE':
-        new_mode = 'FONCTIONNEL';
-        break;
-      case 'TRACKING':
-        new_mode = 'FONCTIONNEL';
-        break;
-    }
-  }
-
-  if (new_mode === 'PAUSE' && pause_duration) {
-    const submitData = {
-      trackerId: tracker.id,
-      duration: pause_duration,
-      deplacement: deplacement,
-    };
-    await fetch('https://next-js-starter-lyart.vercel.app/api/pause-tracker', {
-      method: 'PATCH',
-      body: JSON.stringify(submitData),
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
-  } else if (new_mode === 'FONCTIONNEL' && tracker.mode === 'INACTIF') {
-    await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/wake-tracker?trackerId=${tracker.id}&source=site`,
-    );
-  } else if (new_mode === 'INACTIF') {
-    await fetch(
-      `https://next-js-starter-lyart.vercel.app/api/shutdown-tracker?trackerId=${tracker.id}&source=site`,
-    );
-  } else {
-    const submitData = {
-      id: tracker.id,
-      mode: new_mode,
-    };
-    await fetch(
-      'https://next-js-starter-lyart.vercel.app/api/update-tracker-mode',
-      {
-        method: 'PATCH',
-        body: JSON.stringify(submitData),
-        headers: {
-          'content-type': 'application/json',
-        },
-      },
-    );
-  }
-
-  window.location.reload();
-
-  return new_mode;
-}
-
-async function togglePauseTracking(tracker: any, selectedOption: string) {
-  if (selectedOption === 'pause') {
-    await fetch(
-      'https://next-js-starter-lyart.vercel.app/api/toggle-pause-tracking',
-      {
-        method: 'PATCH',
-        body: JSON.stringify({ trackerId: tracker.id, start_pause: true }),
-        headers: {
-          'content-type': 'application/json',
-        },
-      },
-    );
-  } else if (selectedOption === 'cancel') {
-    await fetch(
-      'https://next-js-starter-lyart.vercel.app/api/cancel-tracking',
-      {
-        method: 'PATCH',
-        body: JSON.stringify({ trackerId: tracker.id }),
-        headers: {
-          'content-type': 'application/json',
-        },
-      },
-    );
-  } else {
-    await fetch(
-      'https://next-js-starter-lyart.vercel.app/api/toggle-pause-tracking',
-      {
-        method: 'PATCH',
-        body: JSON.stringify({ trackerId: tracker.id, start_pause: false }),
-        headers: {
-          'content-type': 'application/json',
-        },
-      },
-    );
-  }
-
-  window.location.reload();
-}
-
-export default function TrackerItem({ tracker }: { tracker: any }) {
+export default function TrackerItem({
+  tracker,
+  setTrackers,
+  trackers,
+}: TrackerItemProps) {
   const [modalDeleteTrackerIsOpen, setModalDeleteTrackerIsOpen] =
     useState(false);
   const [modalToggleTrackerPauseIsOpen, setModalToggleTrackerPauseIsOpen] =
@@ -191,6 +76,161 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
     setModalActivateTrackerIsOpen(false);
   };
 
+  const updateTracker = (updatedTracker: any) => {
+    console.log(updatedTracker);
+
+    const updatedTrackers = trackers.map((tr) =>
+      tr.id === updatedTracker.id ? updatedTracker : tr,
+    );
+    setTrackers(updatedTrackers);
+  };
+
+  function addSeconds(seconds: number) {
+    const date = new Date();
+    date.setSeconds(date.getSeconds() + seconds);
+    return date;
+  }
+
+  async function handleModeChange(
+    tracker: any,
+    wanted_mode: string,
+    change_to_specified_mode: boolean,
+    event?: any,
+  ) {
+    let pause_duration;
+    let hours;
+    let minutes;
+    let seconds;
+    let deplacement;
+
+    if (event) {
+      event.preventDefault();
+      const form = event.target;
+      hours = form.pause_duration_h.value;
+      minutes = form.pause_duration_m.value;
+      seconds = form.pause_duration_s.value;
+      pause_duration =
+        parseInt(seconds) + parseInt(minutes) * 60 + parseInt(hours) * 3600;
+      deplacement = form.deplacement.checked;
+    }
+
+    let new_mode;
+    if (change_to_specified_mode) {
+      new_mode = wanted_mode;
+    } else {
+      switch (wanted_mode) {
+        case 'INACTIF':
+          new_mode = 'FONCTIONNEL';
+          break;
+        case 'FONCTIONNEL':
+          new_mode = 'PAUSE';
+          break;
+        case 'PAUSE':
+          new_mode = 'FONCTIONNEL';
+          break;
+        case 'TRACKING':
+          new_mode = 'FONCTIONNEL';
+          break;
+      }
+    }
+
+    const updatedTracker = tracker;
+    updatedTracker.mode = new_mode;
+
+    if (new_mode === 'PAUSE' && pause_duration) {
+      const pause_end_time = addSeconds(pause_duration);
+
+      const submitData = {
+        trackerId: tracker.id,
+        duration: pause_duration,
+        deplacement: deplacement,
+        pause_end_time: pause_end_time,
+      };
+      await fetch(
+        'https://next-js-starter-lyart.vercel.app/api/pause-tracker',
+        {
+          method: 'PATCH',
+          body: JSON.stringify(submitData),
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+      updatedTracker.pause_duration = pause_duration;
+      updatedTracker.pause_end_time = pause_end_time;
+      updatedTracker.deplacement = deplacement;
+    } else if (new_mode === 'FONCTIONNEL' && tracker.mode === 'INACTIF') {
+      await fetch(
+        `https://next-js-starter-lyart.vercel.app/api/wake-tracker?trackerId=${tracker.id}&source=site`,
+      );
+    } else if (new_mode === 'INACTIF') {
+      await fetch(
+        `https://next-js-starter-lyart.vercel.app/api/shutdown-tracker?trackerId=${tracker.id}&source=site`,
+      );
+    } else {
+      const submitData = {
+        id: tracker.id,
+        mode: new_mode,
+      };
+      await fetch(
+        'https://next-js-starter-lyart.vercel.app/api/update-tracker-mode',
+        {
+          method: 'PATCH',
+          body: JSON.stringify(submitData),
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+    }
+
+    updateTracker(updatedTracker);
+  }
+
+  async function togglePauseTracking(tracker: any, selectedOption: string) {
+    const updatedTracker = tracker;
+    if (selectedOption === 'pause') {
+      await fetch(
+        'https://next-js-starter-lyart.vercel.app/api/toggle-pause-tracking',
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ trackerId: tracker.id, start_pause: true }),
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+      updatedTracker.pause_tracking = true;
+      updateTracker(updatedTracker);
+    } else if (selectedOption === 'cancel') {
+      await fetch(
+        'https://next-js-starter-lyart.vercel.app/api/cancel-tracking',
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ trackerId: tracker.id }),
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+      updatedTracker.mode = 'FONCTIONNEL';
+      updateTracker(updatedTracker);
+    } else {
+      await fetch(
+        'https://next-js-starter-lyart.vercel.app/api/toggle-pause-tracking',
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ trackerId: tracker.id, start_pause: false }),
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+      updatedTracker.pause_tracking = false;
+      updateTracker(updatedTracker);
+    }
+  }
+
   return (
     <div className="tracker-container">
       <ModalToggleTrackerPause
@@ -203,7 +243,9 @@ export default function TrackerItem({ tracker }: { tracker: any }) {
       <ModalDeleteTracker
         isOpen={modalDeleteTrackerIsOpen}
         onRequestClose={closeModalDeleteTracker}
-        trackerId={tracker.id}
+        tracker={tracker}
+        setTrackers={setTrackers}
+        trackers={trackers}
       />
 
       <ModalActivateTracker

@@ -27,7 +27,7 @@ export default function ModalActivateTracker({
 
     handleModeChange(tracker, tracker.mode, false);
 
-    window.location.reload();
+    onRequestClose();
   };
 
   return (

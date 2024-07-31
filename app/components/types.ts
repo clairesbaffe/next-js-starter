@@ -27,14 +27,20 @@ export interface Tracker {
   nom: string;
   ruche_id: number;
   mode: string;
-  date_ajout: string;
-  date_modification: string;
+  date_ajout: Date;
+  date_modification: Date;
+  date_modif_mode: Date;
+  pause_duration: number | undefined;
+  pause_end_time: Date | undefined;
+  deplacement: boolean | undefined;
+  pause_tracking: boolean | undefined;
   historiques: Historique[];
   ruche: Ruche;
 }
 
 export interface TrackersListProps {
   initialTrackers: Tracker[];
+  setTrackers: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export interface CombinedPagesProps extends TrackersListProps {

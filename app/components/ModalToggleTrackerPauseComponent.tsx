@@ -34,6 +34,7 @@ export default function ModalToggleTrackerPause({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleModeChange(tracker, tracker.mode, false, event);
+    onRequestClose();
   };
   return (
     <Modal
