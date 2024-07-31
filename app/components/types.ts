@@ -51,3 +51,8 @@ export interface CombinedPagesProps {
 export interface RuchesListProps {
   balances: Ruche[];
 }
+
+export interface AddTrackerProps extends RuchesListProps {
+  trackers: Tracker[];
+  setTrackers: React.Dispatch<React.SetStateAction<any[]>>;
+}

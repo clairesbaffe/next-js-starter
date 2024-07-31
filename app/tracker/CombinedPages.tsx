@@ -176,7 +176,11 @@ function CombinedPages({ initialTrackers, balances }: CombinedPagesProps) {
           />
         </TabPanel>
         <TabPanel className={'trackerListPanel'}>
-          <TrackerForm balances={balances} />
+          <TrackerForm
+            balances={balances}
+            trackers={trackers}
+            setTrackers={setTrackers}
+          />
           <TrackersList
             initialTrackers={filteredTrackers}
             setTrackers={setTrackers}

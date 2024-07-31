@@ -15,6 +15,9 @@ export async function POST(req: Request, res: any) {
         mode: 'INACTIF',
         date_modif_mode: new Date(),
       },
+      include: {
+        ruche: true,
+      },
     });
 
     return NextResponse.json(tracker, { status: 200 });

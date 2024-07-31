@@ -6,7 +6,7 @@ import styles from './Modal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-import { RuchesListProps } from './types';
+import { AddTrackerProps } from './types';
 import './TrackerFormComponent.css';
 
 async function addTracker(nom: string, selectedBalance: number) {
@@ -14,16 +14,34 @@ async function addTracker(nom: string, selectedBalance: number) {
     nom: nom,
     ruche_id: selectedBalance,
   };
-  await fetch('http://localhost:3000/api/add-tracker', {
-    method: 'POST',
-    body: JSON.stringify(submitData),
-    headers: {
-      'content-type': 'application/json',
+
+  const response = await fetch(
+    'https://next-js-starter-lyart.vercel.app/api/add-tracker',
+    {
+      method: 'POST',
+      body: JSON.stringify(submitData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
-  });
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! Status: ${response.status}. Message: ${errorText}`,
+    );
+  }
+
+  try {
+    const data = await response.json(); // Assurez-vous que la réponse est JSON
+    return data;
+  } catch (error) {
+    throw new Error('Failed to parse JSON response: ' + error);
+  }
 }
 
-const TrackerForm = ({ balances }: RuchesListProps) => {
+const TrackerForm = ({ balances, trackers, setTrackers }: AddTrackerProps) => {
   const [modalNewTracker, setModalNewTracker] = useState(false);
   const [selectedBalance, setSelectedBalance] = useState(balances[0].id);
 
@@ -34,14 +52,19 @@ const TrackerForm = ({ balances }: RuchesListProps) => {
     setModalNewTracker(false);
   };
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.target;
+    const form = event.target as HTMLFormElement;
     const nom = form.nom.value;
 
-    await addTracker(nom, selectedBalance);
+    try {
+      const newTracker = await addTracker(nom, selectedBalance);
+      setTrackers([...trackers, newTracker]);
 
-    window.location.reload();
+      closeModalNewTracker();
+    } catch (error) {
+      console.error('Failed to add tracker:', error);
+    }
   };
 
   function handleBalanceSelectChange(event: any) {
