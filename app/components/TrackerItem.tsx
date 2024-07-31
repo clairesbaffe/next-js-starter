@@ -27,6 +27,7 @@ type TrackerItemProps = {
 function renderModeDescription(
   mode: string,
   pause_tracking: boolean | undefined,
+  deplacement: boolean | undefined,
 ): string {
   switch (mode) {
     case 'INACTIF':
@@ -34,6 +35,7 @@ function renderModeDescription(
     case 'FONCTIONNEL':
       return 'Tracker en marche';
     case 'PAUSE':
+      if (deplacement) return 'Tracker en déplacement';
       return 'Tracker en pause';
     case 'TRACKING':
       if (pause_tracking) return 'Tracking en pause';
@@ -77,8 +79,6 @@ export default function TrackerItem({
   };
 
   const updateTracker = (updatedTracker: any) => {
-    console.log(updatedTracker);
-
     const updatedTrackers = trackers.map((tr) =>
       tr.id === updatedTracker.id ? updatedTracker : tr,
     );
@@ -257,7 +257,13 @@ export default function TrackerItem({
 
       <div className="left-side">
         <h1>{tracker.nom}</h1>
-        <p>{renderModeDescription(tracker.mode, tracker.pause_tracking)}</p>
+        <p>
+          {renderModeDescription(
+            tracker.mode,
+            tracker.pause_tracking,
+            tracker.deplacement,
+          )}
+        </p>
         {tracker.mode === 'PAUSE' && (
           <p>
             Fin de la pause :{' '}
