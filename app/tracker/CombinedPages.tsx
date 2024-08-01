@@ -157,6 +157,7 @@ function CombinedPages({ initialTrackers, balances }: CombinedPagesProps) {
             onChange={handleModeFilterChange}
             name="mode"
             id="modeSelect"
+            isSearchable={false}
           />
         </div>
       </div>
