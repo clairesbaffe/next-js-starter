@@ -1,6 +1,6 @@
 p,
 label {
-  font-size: 0.8vw;
+  font-size: 0.8em;
 }
 
 #pageContainer {
@@ -124,7 +124,7 @@ label {
   background-color: white;
   color: #555555;
 
-  margin: 1.5%;
+  margin: 0.5em;
   padding: 2%;
   width: 30%;
   border-radius: 10px;
@@ -135,16 +135,20 @@ label {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  margin: 0.1em;
+}
+.tracker-container .left-side {
+  margin: 0.1em;
 }
 
 .tracker-menu-icon {
-  width: 1.2vw;
+  width: 1.2em;
   cursor: pointer;
 }
 
 .tracker-mode-icon {
-  height: 1.2vw;
-  width: 1.2vw;
+  height: 1.2em;
+  width: 1.2em;
   padding: 6px;
   border-radius: 100%;
   cursor: pointer;
@@ -184,7 +188,7 @@ label {
 .tracker-menu-button {
   display: flex;
   align-items: center;
-  font-size: 1vw;
+  font-size: 0.75em;
   margin: 0.3vw;
 }
 
@@ -195,9 +199,55 @@ label {
 }
 
 .select-tracker-mode-icon {
-  padding: 0.25vw;
-  width: 1vw;
-  height: 1vw;
+  width: 1em;
+  height: 1em;
+
+  padding: 0.25em;
+  margin-right: 0.5em;
   border-radius: 100%;
-  margin-right: 0.5vw;
+}
+
+/* MODAL */
+
+.closeAddTrackerModal {
+  width: 1em;
+  height: 1em;
+}
+
+.deleteTrackerChoice button {
+  width: 35%;
+  padding: 0.25em 0.5em;
+}
+
+.deleteTrackerChoice {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+@media screen and (max-width: 370px) {
+  #pageContainer {
+    flex-direction: column;
+  }
+
+  .pageLeftSide {
+    flex-direction: row;
+    width: 90vw;
+  }
+
+  .filterContainer {
+    width: 50%;
+  }
+
+  .pageRightSide {
+    width: 100%;
+  }
+
+  .tracker-container {
+    width: 100%;
+  }
+
+  #modeSelect {
+    width: 90%;
+  }
 }

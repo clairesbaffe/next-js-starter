@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 import styles from './Modal.module.css';
 import Modal from 'react-modal';
 
@@ -49,15 +52,25 @@ export default function ModalDeleteTracker({
       className={styles.modalContainer}
       overlayClassName={styles.modalOverlay}
     >
-      <p>Supprimer le tracker ?</p>
-      <button onClick={onRequestClose}>Non</button>
-      <button
-        onClick={() => {
-          handleTrackerDelete(tracker.id);
-        }}
-      >
-        Oui
-      </button>
+      <div className="componentContainer space-y-6">
+        <h1>Supprimer le tracker ?</h1>
+        <FontAwesomeIcon
+          className="closeAddTrackerModal"
+          onClick={onRequestClose}
+          icon={faXmark}
+        />
+
+        <div className="deleteTrackerChoice">
+          <button onClick={onRequestClose}>Non</button>
+          <button
+            onClick={() => {
+              handleTrackerDelete(tracker.id);
+            }}
+          >
+            Oui
+          </button>
+        </div>
+      </div>
     </Modal>
   );
 }

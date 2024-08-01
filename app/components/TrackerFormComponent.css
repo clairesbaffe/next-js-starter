@@ -20,8 +20,6 @@
 
 .inputGroup {
   font-family: 'Segoe UI', sans-serif;
-  /* margin: 0% 3%; */
-  /* min-width: 25vw; */
   position: relative;
 }
 
@@ -54,25 +52,17 @@
   background-color: #ffffff;
 }
 
-.inputGroup :is(input:focus, input:valid) {
-  border-color: rgb(226, 211, 138);
-}
-
 .displayRow {
   display: flex;
   align-items: center;
 }
 
-.inputGroupLeft {
-  width: 30vw;
-}
-
-.inputGroupRight {
-  width: 15vw;
-}
-
 .inputGroupLarge {
   width: 45vw;
+}
+
+.inputGroupLarge option {
+  font-size: 1em;
 }
 
 .closeAddTrackerModal {
@@ -105,4 +95,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@media screen and (max-width: 370px) {
+  .addTrackerButton {
+    width: 45vw;
+  }
+
+  .inputGroupLarge option {
+    font-size: 0.7em;
+  }
 }
