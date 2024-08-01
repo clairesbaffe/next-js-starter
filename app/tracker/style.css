@@ -178,10 +178,10 @@ label {
 }
 
 .mini-tracker-mode-icon {
-  height: 0.5vw;
-  width: 0.5vw;
+  height: 0.5em;
+  width: 0.5em;
   padding: 4px;
-  margin-right: 0.25vw;
+  margin-right: 0.25em;
   border-radius: 100%;
 }
 
