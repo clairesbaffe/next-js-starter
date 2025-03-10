@@ -69,7 +69,7 @@ Add the connexion to your database.
 
 ### Running the application
 ```sh
-pnpm dev
+npm run dev
 ```
 
 The application will be available at `http://localhost:3000`.
